@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+/* body {
+    direction: rtl;
+} */
+@import "tailwindcss";
+
+/* أضف هذا السطر لتجبر تيلويند v4 على قراءة كلاس dark */
+@variant dark (&:where(.dark, .dark *));

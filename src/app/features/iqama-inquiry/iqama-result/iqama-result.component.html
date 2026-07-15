@@ -1,0 +1,178 @@
+<div class="bg-gray-50 dark:bg-gray-950 min-h-screen px-4 md:px-8 py-8">
+    <div class="max-w-[1100px] mx-auto">
+        <nav
+            class="text-[11px] sm:text-[13px] text-gray-500 dark:text-gray-400 font-bold mb-4 flex items-center gap-1.5 flex-wrap">
+            <a href="/e-services" class="hover:text-[#006C35] dark:hover:text-green-400 transition">الاستعلامات
+                الإلكترونية</a>
+            <span>&gt;</span>
+            <a href="/labor" class="hover:text-[#006C35] dark:hover:text-green-400 transition">الجوازات</a>
+            <span>&gt;</span>
+            <span class="text-gray-700 dark:text-gray-300">الإستعلام عن معاملات الوافدين</span>
+        </nav>
+
+        <!-- عنوان الصفحة الرئيسي -->
+        <div class="mb-6">
+            <h6 class="text-base sm:text-xl md:text-2xl font-black text-gray-900 dark:text-white mb-2">
+                خدمة تتيح متابعة والاستعلام عن حالة معامللات الوافدين ومعرفة تفاصيل الاجراء او مرحلة <br> الانجاز حسب
+                البيانات المتوفره
+            </h6>
+        </div>
+
+        <div *ngIf="loading" class="text-center py-20 text-gray-500 dark:text-gray-400 font-bold">
+            جاري تحميل البيانات...
+        </div>
+
+        <div *ngIf="!loading && errorMsg"
+            class="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-300 text-[14px] font-bold rounded-lg px-4 py-3">
+            {{ errorMsg }}
+            <button (click)="goBack()" class="underline ms-2">ارجع للبحث</button>
+        </div>
+
+        <ng-container *ngIf="!loading && result">
+
+            <!-- Card 1: بيانات صاحب العمل -->
+            <div
+                class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6 md:p-8 mb-6">
+                <h2
+                    class="text-lg md:text-xl font-black text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-800 pb-4 mb-4">
+                    تفاصيل العمالة الوافدة || {{ result.employer.company_name }}
+                </h2>
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-[14px] font-bold text-gray-700 dark:text-gray-300 mb-2">
+                    <div>
+                        <span class="text-gray-500 dark:text-gray-400">رقم هوية الكفيل: </span>
+                        <span class="font-black text-gray-900 dark:text-white">{{ result.employer.identity_number
+                            }}</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-500 dark:text-gray-400">رقم المصدر: </span>
+                        <span class="font-black text-gray-900 dark:text-white">{{ result.employer.source_number
+                            }}</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-500 dark:text-gray-400">رقم الملف: </span>
+                        <span class="font-black text-gray-900 dark:text-white">{{ result.employer.file_number }}</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-500 dark:text-gray-400">المرجع: </span>
+                        <span class="font-black text-gray-900 dark:text-white">{{ result.employer.reference_number
+                            }}</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-500 dark:text-gray-400">الجهة المصدرة: </span>
+                        <span class="font-black text-gray-900 dark:text-white">وزارة العمل - آلي</span>
+                    </div>
+                    <div *ngIf="selectedWorker?.updatedAt">
+                        <span class="text-gray-500 dark:text-gray-400">تاريخ آخر تعديل: </span>
+                        <span class="font-black text-gray-900 dark:text-white">{{
+                            convertToHijri(selectedWorker?.updatedAt) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: جدول حالة الإقامة -->
+            <div
+                class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6 mb-6">
+
+                <!-- جدول (md فأكبر) -->
+                <div class="hidden md:block overflow-x-auto">
+                    <table class="w-full text-[14px] text-start">
+                        <thead>
+                            <tr
+                                class="border-b-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-black">
+                                <th class="pb-3 text-start">الإسم</th>
+                                <th class="pb-3 text-start">رقم الإقامة</th>
+                                <th class="pb-3 text-start">تاريخ إصدار الإقامة</th>
+                                <th class="pb-3 text-start">تاريخ إنتهاء الإقامة</th>
+                                <th class="pb-3 text-start">حالة الإقامة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let worker of workers" (click)="selectWorker(worker)"
+                                class="border-b border-gray-100 dark:border-gray-800 text-gray-800 dark:text-gray-200 font-bold cursor-pointer transition"
+                                [ngClass]="selectedWorker?._id === worker._id ? 'bg-green-50 dark:bg-green-950/30' : 'hover:bg-gray-50 dark:hover:bg-gray-800'">
+                                <td class="py-3 flex items-center gap-2">
+                                    <input type="radio" name="workerSelect"
+                                        [checked]="selectedWorker?._id === worker._id" (click)="selectWorker(worker)"
+                                        class="accent-[#006C35]" />
+                                    {{ worker.name }}
+                                </td>
+                                <td class="py-3">{{ worker.iqama_number }}</td>
+                                <td class="py-3">{{ convertToHijri(worker.iqama_issue_date) }}</td>
+                                <td class="py-3">{{ convertToHijri(worker.iqama_expiry_date) }}</td>
+                                <td class="py-3">
+                                    <span
+                                        class="px-2.5 py-1 rounded-md text-[12px] font-black bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400">
+                                        {{ worker.iqama_status }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- كارت (موبايل) -->
+                <div class="md:hidden flex flex-col gap-3">
+                    <div *ngFor="let worker of workers" (click)="selectWorker(worker)"
+                        class="border rounded-lg p-4 flex flex-col gap-2 cursor-pointer transition" [ngClass]="selectedWorker?._id === worker._id
+                ? 'bg-green-50 dark:bg-green-950/30 border-green-300 dark:border-green-800'
+                : 'border-gray-200 dark:border-gray-700'">
+                        <div class="flex items-center justify-between">
+                            <span class="font-black text-gray-900 dark:text-white text-[14px] flex items-center gap-2">
+                                <input type="radio" name="workerSelectMobile"
+                                    [checked]="selectedWorker?._id === worker._id" class="accent-[#006C35]" />
+                                {{ worker.name }}
+                            </span>
+                            <span
+                                class="px-2.5 py-1 rounded-md text-[11px] font-black bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400">
+                                {{ worker.iqama_status }}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-y-1.5 text-[12px] text-gray-600 dark:text-gray-400">
+                            <span>رقم الإقامة: <span class="font-black text-gray-900 dark:text-white">{{
+                                    worker.iqama_number }}</span></span>
+                            <span>الإصدار: <span class="font-black text-gray-900 dark:text-white">{{
+                                    convertToHijri(worker.iqama_issue_date) }}</span></span>
+                            <span class="col-span-2">الإنتهاء: <span class="font-black text-gray-900 dark:text-white">{{
+                                    convertToHijri(worker.iqama_expiry_date) }}</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- رسالة عدم وجود بيانات -->
+                <div *ngIf="workers.length === 0" class="text-center py-8 text-gray-500 dark:text-gray-400 font-bold">
+                    لا يوجد عمالة مسجلة لهذا الكفيل.
+                </div>
+
+                <!-- أزرار الإجراءات -->
+                <div *ngIf="workers.length > 0" class="flex items-center gap-3 mt-6 flex-wrap">
+                    <span class="w-2 h-2 bg-green-600 rounded-full"></span>
+                    <button (click)="onPrint()" [disabled]="!selectedWorker"
+                        class="bg-[#006C35] hover:bg-[#004B23] disabled:opacity-50 text-white font-black px-6 py-2 rounded-lg transition text-[14px]">
+                        طباعة
+                    </button>
+                    <button (click)="onEnd()" [disabled]="!selectedWorker"
+                        class="bg-[#006C35] hover:bg-[#004B23] disabled:opacity-50 text-white font-black px-6 py-2 rounded-lg transition text-[14px]">
+                        إنهاء
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 3: شرح حالات الإقامة -->
+            <div
+                class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
+                <div
+                    class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-3 grid grid-cols-[180px_1fr] gap-4 text-[13px] font-black text-gray-700 dark:text-gray-300">
+                    <span>حالة الإقامة</span>
+                    <span>التفاصيل</span>
+                </div>
+                <div *ngFor="let item of statusLegend"
+                    class="grid grid-cols-[180px_1fr] gap-4 px-6 py-4 text-[13px] leading-7 border-b border-gray-100 dark:border-gray-800 last:border-0">
+                    <span class="font-black text-gray-800 dark:text-gray-200">{{ item.label }}</span>
+                    <span class="text-gray-600 dark:text-gray-400">{{ item.desc }}</span>
+                </div>
+            </div>
+
+        </ng-container>
+    </div>
+</div>

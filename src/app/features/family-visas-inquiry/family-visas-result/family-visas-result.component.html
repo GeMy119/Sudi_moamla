@@ -1,0 +1,242 @@
+<div class="bg-gray-50 dark:bg-gray-950 min-h-screen px-4 md:px-8 py-8" dir="rtl">
+    <div class="max-w-[1100px] mx-auto">
+
+        <div *ngIf="loading" class="text-center py-20 text-gray-500 dark:text-gray-400 font-bold">
+            جاري تحميل البيانات...
+        </div>
+
+        <div *ngIf="!loading && errorMsg"
+            class="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-300 text-[14px] font-bold rounded-lg px-4 py-3">
+            {{ errorMsg }}
+            <button (click)="goBack()" class="underline ms-2">ارجع للبحث</button>
+        </div>
+
+        <ng-container *ngIf="!loading && result && workerInfo as worker">
+
+            <!-- Card 1: بيانات الكفيل والوافد -->
+            <div
+                class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6 md:p-8 mb-6">
+                <h2
+                    class="text-lg md:text-xl font-black text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-800 pb-4 mb-4">
+                    تفاصيل الوافدين || {{ worker.employer_company_name }}
+                </h2>
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-[14px] font-bold text-gray-700 dark:text-gray-300">
+                    <div>
+                        <span class="text-gray-500 dark:text-gray-400">رقم هوية الكفيل: </span>
+                        <span class="font-black text-gray-900 dark:text-white">{{ worker.employer_identity_number
+                            }}</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-500 dark:text-gray-400">رقم الصادر: </span>
+                        <span class="font-black text-gray-900 dark:text-white">{{ worker.employer_source_number
+                            }}</span>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <span class="text-gray-500 dark:text-gray-400">الجهة المصدرة: </span>
+                        <span class="font-black text-gray-900 dark:text-white">مكتب الإستقدام - آلي</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex items-center gap-2 mb-4 overflow-x-auto print:hidden">
+                <button (click)="setTab('familyVisit')"
+                    class="px-5 py-2.5 rounded-t-xl text-[14px] font-black whitespace-nowrap transition flex items-center gap-2"
+                    [ngClass]="activeTab === 'familyVisit'
+                    ? 'bg-[#006C35] text-white shadow-sm'
+                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'">
+                    زيارة عائلية
+                    <span *ngIf="familyVisitCount > 0"
+                        class="w-5 h-5 flex items-center justify-center rounded-full text-[11px]"
+                        [ngClass]="activeTab === 'familyVisit' ? 'bg-white/20' : 'bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400'">
+                        {{ familyVisitCount }}
+                    </span>
+                </button>
+
+                <button (click)="setTab('familyRecruitment')"
+                    class="px-5 py-2.5 rounded-t-xl text-[14px] font-black whitespace-nowrap transition flex items-center gap-2"
+                    [ngClass]="activeTab === 'familyRecruitment'
+                    ? 'bg-[#006C35] text-white shadow-sm'
+                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'">
+                    استقدام عائلي
+                    <span *ngIf="familyRecruitmentCount > 0"
+                        class="w-5 h-5 flex items-center justify-center rounded-full text-[11px]"
+                        [ngClass]="activeTab === 'familyRecruitment' ? 'bg-white/20' : 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-400'">
+                        {{ familyRecruitmentCount }}
+                    </span>
+                </button>
+            </div>
+
+            <!-- Card 2: المحتوى (بيتغير حسب التاب) -->
+            <div
+                class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6 mb-6">
+
+                <!-- ============ تاب: زيارة عائلية — جدول حقيقي ============ -->
+                <div *ngIf="activeTab === 'familyVisit'" class="overflow-x-auto">
+                    <table dir="rtl" class="w-full border-collapse text-[13px]">
+                        <tbody>
+                            <tr *ngFor="let visa of activeVisas" class="border border-gray-400 dark:border-gray-600">
+
+                                <!-- عمود اسم الزائر (الأعرض، فيه 3 أسطر) -->
+                                <td class="border-e border-gray-400 dark:border-gray-600 align-top px-3 py-2 w-[45%]">
+                                    <div class="flex flex-col gap-1">
+                                        <div>
+                                            <span class="text-gray-600 dark:text-gray-400 font-bold">إسم الزائر: </span>
+                                            <span class="font-black text-gray-900 dark:text-white">{{ visa.visitor_name
+                                                }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-600 dark:text-gray-400 font-bold">جنسيته: </span>
+                                            <span class="font-black text-gray-900 dark:text-white">{{ visa.nationality
+                                                }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-600 dark:text-gray-400 font-bold">العلاقة: </span>
+                                            <span class="font-black text-gray-900 dark:text-white">{{ visa.relation
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- عمود المهنة وقادم من (فيه سطرين) -->
+                                <td class="border-e border-gray-400 dark:border-gray-600 align-top px-3 py-2 w-[30%]">
+                                    <div class="flex flex-col gap-1">
+                                        <div>
+                                            <span class="text-gray-600 dark:text-gray-400 font-bold">مهنته: </span>
+                                            <span class="font-black text-gray-900 dark:text-white">زيارة عائلية</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-600 dark:text-gray-400 font-bold">قادم من: </span>
+                                            <span class="font-black text-gray-900 dark:text-white">{{ visa.arrival_from
+                                                || '—' }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- عمود السن والمدة (الأضيق) -->
+                                <td class="align-top px-3 py-2 w-[25%]">
+                                    <div class="flex flex-col gap-1">
+                                        <div>
+                                            <span class="text-gray-600 dark:text-gray-400 font-bold">السن: </span>
+                                            <span class="font-black text-gray-900 dark:text-white">{{ visa.validity_days
+                                                ?? '—' }}</span>
+                                            <span class="text-gray-600 dark:text-gray-400">سنة</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-600 dark:text-gray-400 font-bold">لمدة: </span>
+                                            <span class="font-black text-gray-900 dark:text-white">{{ visa.duration_days
+                                                }}</span>
+                                            <span class="text-gray-600 dark:text-gray-400">يوم</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ============ تاب: استقدام عائلي ============ -->
+                <ng-container *ngIf="activeTab === 'familyRecruitment'">
+
+                    <!-- جدول: من md فأكبر -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-[14px] text-start">
+                            <thead>
+                                <tr
+                                    class="border-b-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-black">
+                                    <th class="pb-3 text-start">الرقم التسلسلي</th>
+                                    <th class="pb-3 text-start">فئة المهنة</th>
+                                    <th class="pb-3 text-start">الجنسية</th>
+                                    <th class="pb-3 text-start">النوع</th>
+                                    <th class="pb-3 text-start">مكان القدوم</th>
+                                    <th class="pb-3 text-start">حالة التأشيرة</th>
+                                    <th class="pb-3 text-start">رقم الملف المرسل للبنك</th>
+                                    <th class="pb-3 text-start">تاريخ الإرسال للبنك للاسترداد</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let visa of activeVisas"
+                                    class="border-b border-gray-100 dark:border-gray-800 text-gray-800 dark:text-gray-200 font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                    <td class="py-3 font-mono">{{ visa._id ? visa._id.slice(-10) : '—' }}</td>
+                                    <td class="py-3">{{ visa.relation || 'زوجة' }}</td>
+                                    <td class="py-3">{{ visa.nationality }}</td>
+                                    <td class="py-3">استقدام عائلي</td>
+                                    <td class="py-3">{{ visa.arrival_from || '—' }}</td>
+                                    <td class="py-3">
+                                        <span class="px-2.5 py-1 rounded-md text-[12px] font-black"
+                                            [ngClass]="visa.status === 'approved' || visa.status === 'تمت الموافقه' ? 'bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400' : 'bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-400'">
+                                            {{ getStatusLabel(visa.status) || 'تمت الموافقة' }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3 text-gray-400 dark:text-gray-500">—</td>
+                                    <td class="py-3 text-gray-400 dark:text-gray-500">—</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- بطاقات: على الموبايل -->
+                    <div class="md:hidden flex flex-col gap-3">
+                        <div *ngFor="let visa of activeVisas"
+                            class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 flex flex-col gap-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-black text-gray-900 dark:text-white text-[14px] font-mono">
+                                    {{ visa._id ? visa._id.slice(-10) : '—' }}
+                                </span>
+                                <span class="px-2.5 py-1 rounded-md text-[11px] font-black"
+                                    [ngClass]="visa.status === 'approved' || visa.status === 'تمت الموافقه' ? 'bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400' : 'bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-400'">
+                                    {{ getStatusLabel(visa.status) || 'تمت الموافقه' }}
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-y-1.5 text-[12px] text-gray-600 dark:text-gray-400">
+                                <span>فئة المهنة: <span class="font-black text-gray-900 dark:text-white">{{
+                                        visa.relation || 'زوجة' }}</span></span>
+                                <span>الجنسية: <span class="font-black text-gray-900 dark:text-white">{{
+                                        visa.nationality }}</span></span>
+                                <span>مكان القدوم: <span class="font-black text-gray-900 dark:text-white">{{
+                                        visa.arrival_from || '—' }}</span></span>
+                                <span>رقم ملف البنك: <span
+                                        class="font-black text-gray-900 dark:text-white">—</span></span>
+                                <span class="col-span-2">تاريخ الإرسال: <span
+                                        class="font-black text-gray-900 dark:text-white">—</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <div *ngIf="activeVisas.length === 0"
+                    class="text-center py-8 text-gray-500 dark:text-gray-400 font-bold">
+                    <span>لا توجد طلبات مسجلة في هذا القسم.</span>
+                </div>
+
+                <div *ngIf="activeVisas.length > 0" class="flex items-center gap-3 mt-6 print:hidden">
+                    <span class="w-2 h-2 bg-green-600 rounded-full"></span>
+                    <button (click)="onPrint()"
+                        class="bg-[#006C35] hover:bg-[#004B23] text-white font-black px-6 py-2 rounded-lg transition text-[14px]">
+                        طباعة
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 3: شرح حالات التأشيرة -->
+            <div
+                class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
+                <div
+                    class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-3 grid grid-cols-[180px_1fr] gap-4 text-[13px] font-black text-gray-700 dark:text-gray-300">
+                    <span>حالة التأشيرة</span>
+                    <span>التفاصيل</span>
+                </div>
+                <div *ngFor="let item of statusLegend"
+                    class="grid grid-cols-[180px_1fr] gap-4 px-6 py-4 text-[13px] leading-7 border-b border-gray-100 dark:border-gray-800 last:border-0">
+                    <span class="font-black text-gray-800 dark:text-gray-200"
+                        [ngClass]="{'text-green-600 dark:text-green-400': item.label === 'تمت الموافقة'}">
+                        {{ item.label }}
+                    </span>
+                    <span class="text-gray-600 dark:text-gray-400">{{ item.desc }}</span>
+                </div>
+            </div>
+
+        </ng-container>
+    </div>
+</div>

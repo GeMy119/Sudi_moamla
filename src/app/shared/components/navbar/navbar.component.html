@@ -1,0 +1,340 @@
+<header class="w-full bg-[#f4f5f7] dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800">
+
+    <div class="bg-[#f4f5f7] dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 md:px-8 py-2.5">
+        <div
+            class="max-w-[1440px] mx-auto flex items-center justify-between text-[11px] sm:text-[14px] text-gray-700 dark:text-gray-300">
+
+            <div class="flex items-center gap-2 sm:gap-3 font-bold">
+                <svg class="w-5 h-3.5 sm:w-6 sm:h-4 rounded-sm shrink-0 shadow-sm" viewBox="0 0 30 20" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect width="30" height="20" fill="#006C35" />
+                    <path d="M12 7 L12 11 M10 9 L14 9" stroke="white" stroke-width="1.2" />
+                    <path d="M9 13 L17 13" stroke="white" stroke-width="1" />
+                </svg>
+                <span class="text-gray-600 dark:text-gray-400 truncate max-w-[180px] sm:max-w-none">موقع حكومي رسمي تابع
+                    لحكومة المملكة العربية السعودية</span>
+
+                <button (click)="toggleVerifyPanel()"
+                    class="text-[#006C35] dark:text-green-400 font-extrabold hover:underline flex items-center gap-1 ms-1 sm:ms-2 shrink-0">
+                    كيف تتحقق
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-200"
+                        [class.rotate-180]="verifyPanelOpen" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="hidden sm:flex items-center gap-2 font-bold text-gray-600 dark:text-gray-400">
+                <span>موقع رسمي تابع للجهة</span>
+                <span class="w-2.5 h-2.5 bg-green-600 rounded-full inline-block animate-pulse"></span>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="verifyPanelOpen"
+        class="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-4 md:px-8 py-5 transition-all">
+        <div class="max-w-[1440px] mx-auto flex flex-col gap-6">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+
+                <div class="flex items-start gap-3 sm:gap-4">
+                    <div
+                        class="w-9 h-9 sm:w-10 sm:h-10 bg-green-50 dark:bg-gray-800 rounded-xl flex items-center justify-center shrink-0 text-[#006C35] dark:text-green-400">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-extrabold text-gray-900 dark:text-white text-xs sm:text-[14px]">
+                            المواقع الإلكترونية الرسمية تستخدم بروتوكول HTTPS للتشفير والأمان.
+                        </p>
+                        <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-1 leading-relaxed">
+                            المواقع الإلكترونية الآمنة في المملكة العربية السعودية تستخدم بروتوكول HTTPS للتشفير.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3 sm:gap-4">
+                    <div
+                        class="w-9 h-9 sm:w-10 sm:h-10 bg-green-50 dark:bg-gray-800 rounded-xl flex items-center justify-center shrink-0 text-[#006C35] dark:text-green-400">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"
+                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-extrabold text-gray-900 dark:text-white text-xs sm:text-[14px]">
+                            روابط المواقع الإلكترونية الرسمية السعودية تنتهي بـ <span
+                                class="text-[#006C35] dark:text-green-400 font-mono font-black">gov.sa</span> أو <span
+                                class="text-[#006C35] dark:text-green-400 font-mono font-black">vcc.gives</span>
+                        </p>
+                        <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-1 leading-relaxed">
+                            جميع روابط المواقع الرسمية التابعة لوزارة الداخلية في المملكة العربية السعودية تنتهي بـ
+                            <span class="font-bold">moi.gov.sa</span> أو <span class="font-bold">gov.sa</span> أو <span
+                                class="font-bold">ssd.moi.gov.sa.vcc.gives</span>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div
+                class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-200/70 dark:border-gray-700/70 shadow-sm w-full flex justify-start">
+
+                <div class="flex flex-row items-center justify-start gap-2 text-center sm:text-left">
+                    <div class="flex items-center gap-2">
+                        <img src="hkoma.png" class="h-10 w-10" />
+                        <span
+                            class="text-xs sm:text-[14px] font-bold text-gray-800 dark:text-gray-200 whitespace-nowrap">
+                            مسجل لدى هيئة الحكومة الرقمية برقم:
+                        </span>
+                    </div>
+                    <a href="#"
+                        class="text-xs sm:text-[14px] font-black text-emerald-600 dark:text-emerald-400 underline decoration-2 underline-offset-4 hover:text-emerald-700 dark:hover:text-emerald-300 font-mono transition">
+                        20260406684
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-[#f4f5f7] dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 md:px-8 py-2">
+        <div class="max-w-[1440px] mx-auto flex items-center justify-between">
+            <div
+                class="flex items-center gap-4 sm:gap-6 text-[11px] sm:text-[14px] text-gray-600 dark:text-gray-400 font-bold">
+                <div class="flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>{{ currentHijriDate || '21 محرم 1448 هـ' }}</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>{{ currentTime || '05:14 مساءً' }}</span>
+                </div>
+            </div>
+
+            <div class="hidden lg:flex items-center gap-5 text-gray-600 dark:text-gray-400 font-extrabold text-[14px]">
+                <button (click)="theme.toggleHighContrast()"
+                    class="flex items-center gap-1.5 hover:text-gray-900 dark:hover:text-white transition">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    تبأين عالٍ
+                </button>
+
+                <div
+                    class="flex items-center gap-1.5 bg-white dark:bg-gray-800 px-2.5 py-0.5 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm text-gray-800 dark:text-white">
+                    <button (click)="theme.zoomOut()"
+                        class="font-black text-base px-1 hover:text-red-600 transition">-</button>
+                    <span class="text-xs min-w-[34px] text-center font-bold">{{ theme.fontScale }}%</span>
+                    <button (click)="theme.zoomIn()"
+                        class="font-black text-base px-1 hover:text-green-600 transition">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-900 px-4 md:px-8 py-3 sm:py-4">
+        <div class="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
+
+            <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <button (click)="toggleMobileMenu()"
+                    class="lg:hidden p-1.5 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition shrink-0">
+                    <svg *ngIf="!mobileMenuOpen" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg *ngIf="mobileMenuOpen" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+                <div class="flex items-center gap-2 sm:gap-4 min-w-0">
+                    <div
+                        class="w-11 h-11 sm:w-16 sm:h-16 bg-white border border-gray-100 dark:border-gray-800 rounded-full flex items-center justify-center p-1 shadow-sm shrink-0">
+                        <img src="favicon.svg" alt="الشعار الوطني" class="w-full h-full object-contain"
+                            onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/97/Coat_of_arms_of_Saudi_Arabia.svg'">
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                        <span
+                            class="font-black text-gray-900 dark:text-white text-sm sm:text-lg leading-tight tracking-wide truncate">وزارة
+                            الداخلية</span>
+                        <span
+                            class="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-bold mt-0.5 truncate">المملكة
+                            العربية السعودية</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="hidden lg:flex h-full">
+                <div *ngFor="let item of navItems" class="relative"
+                    (mouseenter)="item.hasDropdown ? onNavItemEnter(item.label) : null"
+                    (mouseleave)="item.hasDropdown ? onNavItemLeave() : null">
+
+                    <a *ngIf="!item.hasDropdown" [routerLink]="item.link"
+                        routerLinkActive="bg-[#006C35] text-white border-b-4 border-[#004B23] rounded-t-xl shadow-sm font-black"
+                        class="flex items-center gap-1.5 px-5 py-3.5 text-[13px] text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-bold cursor-pointer">
+                        {{ item.label }}
+                    </a>
+
+                    <button *ngIf="item.hasDropdown"
+                        class="flex items-center gap-1.5 px-5 py-3.5 text-[13px] text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-bold">
+                        {{ item.label }}
+                        <svg class="w-3.5 h-3.5 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <div *ngIf="item.hasDropdown && activeDropdown === item.label"
+                        class="absolute top-full end-0 pt-2 z-50 w-56">
+                        <div
+                            class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl py-2">
+                            <a *ngFor="let child of item.children" [routerLink]="child.link"
+                                class="block px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-700 font-bold text-xs text-gray-700 dark:text-gray-200 hover:text-[#006C35] dark:hover:text-green-400 transition">
+                                {{ child.label }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                <div class="relative search-wrapper">
+                    <button (click)="toggleSearch()"
+                        class="p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition flex items-center gap-1.5 font-bold text-xs sm:text-[14px]">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"
+                                d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <span class="hidden xl:inline">بحث</span>
+                    </button>
+                    <div *ngIf="searchOpen"
+                        class="absolute top-full mt-3 end-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl p-2 w-64 sm:w-76 z-50">
+                        <form (ngSubmit)="onSearchSubmit()" class="flex items-center gap-2">
+                            <input type="text" [(ngModel)]="searchQuery" name="search" placeholder="ابحث في المنصة..."
+                                autofocus
+                                class="flex-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#006C35]" />
+                            <button type="submit"
+                                class="bg-[#006C35] hover:bg-[#004B23] text-white p-1.5 rounded-lg transition shrink-0">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- زرار اللغة: ظاهر بس في الشاشات الكبيرة، اتشال من هنا في الموبايل -->
+                <button (click)="toggleLang()"
+                    class="hidden lg:flex items-center gap-1 px-2.5 py-1.5 text-[11px] sm:text-[12px] font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition">
+                    <svg class="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9l4.5-4.5m-4.5 4.5L21 21" />
+                    </svg>
+                    <span>{{ currentLang === 'ar' ? 'English' : 'العربية' }}</span>
+                </button>
+
+                <a href="/login"
+                    class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition shadow-sm">
+                    تسجيل الدخول
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- قائمة الموبايل: بقت تاخد الشاشة كاملة (Full-screen overlay) -->
+    <div *ngIf="mobileMenuOpen" class="lg:hidden fixed inset-0 z-[60] bg-white dark:bg-gray-900 overflow-y-auto">
+
+        <!-- هيدر صغير جوه القائمة فيه زرار الإغلاق -->
+        <div
+            class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800 sticky top-0 bg-white dark:bg-gray-900 z-10">
+            <span class="font-black text-gray-900 dark:text-white text-sm">القائمة</span>
+            <button (click)="toggleMobileMenu()"
+                class="p-1.5 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <nav class="flex flex-col p-3 gap-1">
+            <div
+                class="grid grid-cols-3 gap-2 mb-3 p-2 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 text-center text-[11px] font-bold text-gray-700 dark:text-gray-300">
+                <button (click)="theme.toggleDarkMode()"
+                    class="flex flex-col items-center justify-center py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                    <span>{{ theme.isDarkMode ? '☀️ فاتح' : '🌙 داكن' }}</span>
+                </button>
+                <button (click)="theme.toggleHighContrast()"
+                    class="flex flex-col items-center justify-center py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                    <span>👁️ تباين</span>
+                </button>
+                <div
+                    class="flex items-center justify-between bg-white dark:bg-gray-900 px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <button (click)="theme.zoomOut()" class="font-black text-sm px-1">-</button>
+                    <span class="scale-90 font-mono">{{ theme.fontScale }}%</span>
+                    <button (click)="theme.zoomIn()" class="font-black text-sm px-1">+</button>
+                </div>
+            </div>
+
+            <!-- زرار اللغة: اتضاف هنا جوه القائمة -->
+            <button (click)="toggleLang()"
+                class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition border border-gray-100 dark:border-gray-800 mb-2">
+                <span class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9l4.5-4.5m-4.5 4.5L21 21" />
+                    </svg>
+                    اللغة
+                </span>
+                <span class="text-[#006C35] dark:text-green-400 font-black">{{ currentLang === 'ar' ? 'English' :
+                    'العربية' }}</span>
+            </button>
+
+            <div class="h-[1px] bg-gray-100 dark:bg-gray-800 my-2"></div>
+
+            <ng-container *ngFor="let item of navItems">
+                <a *ngIf="!item.hasDropdown" [routerLink]="item.link" routerLinkActive="bg-[#006C35] text-white"
+                    (click)="mobileMenuOpen = false"
+                    class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                    {{ item.label }}
+                </a>
+
+                <button *ngIf="item.hasDropdown"
+                    (click)="activeDropdown = activeDropdown === item.label ? null : item.label"
+                    class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                    {{ item.label }}
+                    <svg class="w-3.5 h-3.5 transition-transform duration-200"
+                        [class.rotate-180]="activeDropdown === item.label" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <div *ngIf="item.hasDropdown && activeDropdown === item.label"
+                    class="ps-4 flex flex-col gap-0.5 my-1 border-s border-gray-200 dark:border-gray-700">
+                    <a *ngFor="let child of item.children" [routerLink]="child.link" (click)="mobileMenuOpen = false"
+                        class="px-3.5 py-2 text-[11px] font-semibold text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition">
+                        {{ child.label }}
+                    </a>
+                </div>
+            </ng-container>
+
+            <div class="border-t border-gray-100 dark:border-gray-800 mt-2 pt-2 px-1">
+                <a href="/login" (click)="mobileMenuOpen = false"
+                    class="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-extrabold text-white bg-[#006C35] hover:bg-[#004B23] rounded-xl shadow-md transition">
+                    تسجيل الدخول
+                </a>
+            </div>
+        </nav>
+    </div>
+</header>

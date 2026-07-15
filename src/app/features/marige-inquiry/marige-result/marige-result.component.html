@@ -1,0 +1,161 @@
+<div class="min-h-screen bg-gray-100 p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto bg-white border-b-2 border-emerald-500 shadow-sm mb-6 rounded-t-lg">
+        <div class="flex flex-wrap justify-start items-center gap-6 px-6 py-3 text-sm font-medium text-gray-600">
+            <a href="#" class="text-emerald-600 border-b-2 border-emerald-600 pb-3 -mb-3.5 font-bold">الاستعلامات
+                الإلكترونية</a>
+            <a href="#" class="hover:text-emerald-600 transition-colors">التصاريح</a>
+            <a href="#" class="hover:text-emerald-600 transition-colors">الاستفسار عن طلبات تصاريح الزواج</a>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto">
+        <div *ngIf="loading" class="text-center py-12 bg-white rounded-lg shadow">
+            <div
+                class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-emerald-500 border-t-transparent">
+            </div>
+            <p class="mt-2 text-gray-600">جاري تحميل بيانات التصريح...</p>
+        </div>
+
+        <div *ngIf="errorMsg && !loading"
+            class="bg-red-50 border-r-4 border-red-500 p-4 rounded shadow mb-6 text-red-700">
+            {{ errorMsg }}
+        </div>
+
+        <div *ngIf="!loading && !errorMsg" class="bg-white rounded-b-lg shadow-sm p-4 md:p-6 border border-gray-200">
+
+            <div class="bg-gray-50 border border-gray-200 rounded p-4 mb-6">
+                <h3 class="text-lg font-bold text-gray-700 mb-4 pb-2 border-b border-gray-200">
+                    تفاصيل || {{ employerData?.name }}
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-4 gap-x-8 text-sm">
+                    <div class="flex items-center">
+                        <span class="text-gray-500 font-medium ml-2">رقم الهوية | السجل :</span>
+                        <span class="text-gray-800 font-bold font-mono">{{ employerData?.identity_number }}</span>
+                    </div>
+
+                    <div class="flex items-center">
+                        <span class="text-gray-500 font-medium ml-2">رقم الصادر :</span>
+                        <span class="text-gray-800 font-bold font-mono">{{ employerData?.source_number }}</span>
+                    </div>
+
+                    <div class="flex items-center">
+                        <span class="text-gray-500 font-medium ml-2">تاريخ الإصدار :</span>
+                        <span class="text-gray-800 font-medium">{{ employerData?.marriage_permit?.issue_date ||
+                            '1447/03/08' }}</span>
+                    </div>
+
+                    <div class="flex items-center">
+                        <span class="text-gray-500 font-medium ml-2">الجهة المصدرة :</span>
+                        <span class="text-gray-800 font-medium">وزارة الداخلية-آلي</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto border border-gray-200 rounded mb-6">
+                <table class="w-full text-right text-sm border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-bold">
+                            <th class="p-3 border-l border-gray-200">الرقم التسلسلي</th>
+                            <th class="p-3 border-l border-gray-200">فئة المهنة</th>
+                            <th class="p-3 border-l border-gray-200">الجنسية</th>
+                            <th class="p-3 border-l border-gray-200">النوع</th>
+                            <th class="p-3 border-l border-gray-200">مكان القدوم</th>
+                            <th class="p-3 border-l border-gray-200">حالة التأشيرة</th>
+                            <th class="p-3 border-l border-gray-200">رقم الملف المرسل للبنك</th>
+                            <th class="p-3">تاريخ الإرسال للبنك للاسترداد</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700">
+                        <tr class="hover:bg-gray-50 border-b border-gray-100 font-medium">
+                            <td class="p-3 border-l border-gray-200 font-mono">{{ employerData?.reference_number }}</td>
+                            <td class="p-3 border-l border-gray-200">{{
+                                employerData?.marriage_permit?.ProfessionCategory || 'زوجة' }}</td>
+                            <td class="p-3 border-l border-gray-200">{{ employerData?.marriage_permit?.wife_nationality
+                                }}</td>
+                            <td class="p-3 border-l border-gray-200">{{ employerData?.marriage_permit?.type || 'تصريح
+                                زواج' }}</td>
+                            <td class="p-3 border-l border-gray-200">{{ employerData?.marriage_permit?.arrival_port }}
+                            </td>
+                            <td class="p-3 border-l border-gray-200 text-emerald-600 font-bold">
+                                {{ employerData?.marriage_permit?.status === 'accepted' ? 'تمت الموافقة' : 'تم الإلغاء'
+                                }}
+                            </td>
+                            <td class="p-3 border-l border-gray-200 font-mono">{{
+                                employerData?.marriage_permit?.file_number || '0' }}</td>
+                            <td class="p-3 font-mono">{{ employerData?.marriage_permit?.sending_date || '-' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-center gap-4 my-8 print:hidden">
+                <button type="button" (click)="onPrint()"
+                    class="px-8 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-sm font-bold min-w-[100px] shadow transition-colors">
+                    طباعة
+                </button>
+                <button type="button" (click)="onFinish()"
+                    class="px-8 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-sm font-bold min-w-[100px] shadow transition-colors">
+                    إنهاء
+                </button>
+            </div>
+
+            <div class="border border-gray-200 rounded overflow-hidden text-xs md:text-sm mt-8">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 border-b border-gray-200 text-gray-700 font-bold">
+                            <th class="p-3 border-l border-gray-200 w-1/4">حالة التصريح</th>
+                            <th class="p-3">التفاصيل</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 divide-y divide-gray-200">
+                        <tr>
+                            <td class="p-3 border-l border-gray-200 font-bold bg-gray-50">تم استخدامها</td>
+                            <td class="p-3 leading-relaxed">
+                                يقصد بها إحدى الحالات التالية :<br>
+                                <strong class="text-gray-800">- تم استخدام هذا التصريح</strong><br>
+                                - لم يتم الإستخدام وقد تم إنهاء إجراءات الدخول إلى المملكة من السفارة ويلزم مراجعة وزارة
+                                الخارجية لتصحيح وضعها أو إلغائها
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 border-l border-gray-200 font-bold bg-gray-50 text-emerald-600">تمت الموافقة
+                            </td>
+                            <td class="p-3 leading-relaxed">يقصد بها أن التصاريح صالحة ويمكن الإستفادة منها وإذا رغبت في
+                                إلغائها يلزم مراجعة وزارة الداخلية لإلغائها</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 border-l border-gray-200 font-bold bg-gray-50">انتهت صلاحيتها</td>
+                            <td class="p-3 leading-relaxed">يقصد بها انتهاء مدة الصلاحية(سنتين)، وبعد مضي 100 يوم من
+                                انتهاء صلاحيتها ستتغير العبارة إلى (تم استعادة رسومها). وفي حالة عدم تغيير العبارة يمكنك
+                                تسجيل طلب عبر (آمر) على الرقم (199099) أو الدخول على موقعهم على الإنترنت.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 border-l border-gray-200 font-bold bg-gray-50">تم إلغاؤها</td>
+                            <td class="p-3 leading-relaxed">يقصد بها أنه تم إلغاؤها وينبغي الانتظار ومتابعتها حتى تتغير
+                                حالتها إلى (تم استعادة رسومها)، وإذا لم تتغير حالتها بعد مضي (15) يوماً يلزم مراجعة
+                                وزارة الخارجية.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 border-l border-gray-200 font-bold bg-gray-50">تم إرسال طلب الإلغاء لوزارة
+                                الخارجية ولم يصل الرد</td>
+                            <td class="p-3 leading-relaxed">يقصد بها أنه تم إرسال طلب الإلغاء لوزارة الخارجية وما يزال
+                                تحت الإجراء، وينبغي الانتظار ومتابعتها على موقع وزارة الخارجية حتى تتغير حالتها إلى (تم
+                                استعادة رسومها)، وإذا لم تتغير حالتها بعد مضي (15) يوماً يلزم مراجعة وزارة الخارجية.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 border-l border-gray-200 font-bold bg-gray-50">تم استعادة رسومها</td>
+                            <td class="p-3 leading-relaxed">يقصد بها أنه تم استرجاع المبلغ إلى الحساب المسدد منه، وإذا
+                                رغبت في الحصول على (رقم هوية المسدد، واسم البنك، وتاريخ رجوع المبلغ) قم بالاتصال بمركز
+                                (آمر) على الرقم (199099) مع تجهيز رقم الهوية ورقم التأشيرة. أما في حالة سداد مبلغ
+                                التأشيرة نقداً فيتم مراجعة البنك مباشرة لاستلامه.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

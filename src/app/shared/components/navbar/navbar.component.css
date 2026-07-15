@@ -1,0 +1,7 @@
+:host {
+    display: block;
+}
+
+:host-context(.high-contrast) {
+    filter: contrast(1.3);
+}

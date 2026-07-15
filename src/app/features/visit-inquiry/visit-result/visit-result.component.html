@@ -1,0 +1,286 @@
+<style>
+    @media print {
+
+        /* إخفاء كل شيء في الصفحة تماماً عند الطباعة */
+        body *,
+        html * {
+            visibility: hidden;
+            background-transparent: true;
+        }
+
+        /* إظهار كارت الوثيقة الرسمية بالكامل ومحتوياته فقط */
+        #visa-card-to-print,
+        #visa-card-to-print * {
+            visibility: visible;
+        }
+
+        /* تثبيت مكان الكارت في أول الصفحة وإلغاء الخلفيات الرمادية للهيكل الخارجي */
+        #visa-card-to-print {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-shadow: none !important;
+            border: none !important;
+            padding: 0px !important;
+            margin: 0 !important;
+            background-color: white !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* إخفاء الأزرار بشكل قاطع منعاً لأي مساحة فارغة */
+        .print\:hidden {
+            display: none !important;
+        }
+    }
+</style>
+
+<div class="bg-gray-100 dark:bg-gray-950 min-h-screen px-2 sm:px-4 py-6" dir="rtl">
+    <ng-container *ngIf="!loading && visit as v">
+
+        <div id="visa-card-to-print"
+            class="max-w-[790px] mx-auto bg-white dark:bg-gray-900 p-4 sm:p-8 shadow-md rounded-sm">
+
+            <div class="flex items-start justify-between border-b-2 border-gray-100 pb-4">
+                <div class="flex flex-col text-right">
+                    <span class="text-gray-900 dark:text-white font-black text-sm sm:text-lg leading-tight">المملكة
+                        العربية السعودية</span>
+                    <span
+                        class="text-gray-500 text-[9px] sm:text-[11px] font-bold font-mono tracking-wider uppercase">KINGDOM
+                        OF SAUDI ARABIA</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="flex flex-col items-center leading-tight">
+                        <span
+                            class="text-[#150e41] dark:text-blue-400 font-black text-xl sm:text-2xl tracking-tight">KSA</span>
+                        <span class="text-[#006C35] font-black text-lg sm:text-xl tracking-tight -mt-1">VISA</span>
+                        <span class="text-[8px] text-gray-400 font-bold -mt-0.5">تأشيرة السعودية</span>
+                    </div>
+                    <div class="h-8 w-[1px] bg-gray-300 mx-1"></div>
+                    <div class="flex flex-col leading-tight">
+                        <span class="text-[#00c29f] font-black text-sm sm:text-base">EVISA</span>
+                        <span class="text-[8px] text-gray-400 font-bold">تأشيرة إلكترونية</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 font-sans text-gray-900 dark:text-gray-100">
+
+                <div class="flex gap-4 items-stretch">
+                    <div class="flex-1 border-t border-gray-300">
+                        <div
+                            class="grid grid-cols-3 items-center border-b border-gray-300 py-1.5 text-[11px] sm:text-[13px]">
+                            <div class="text-gray-600 font-bold pr-2">رقم التأشيرة</div>
+                            <div class="font-black text-center text-sm font-mono">{{ v.visaNo }}</div>
+                            <div class="text-gray-500 text-left pl-2 font-mono">Visa No.</div>
+                        </div>
+                        <div
+                            class="grid grid-cols-3 items-center border-b border-gray-300 py-1.5 text-[11px] sm:text-[13px]">
+                            <div class="text-gray-600 font-bold pr-2">تاريخها</div>
+                            <div class="font-black text-center font-mono">{{ convertToHijri(v.validFrom) }}</div>
+                            <div class="text-gray-500 text-left pl-2 font-mono">Date of Issue</div>
+                        </div>
+                        <div
+                            class="grid grid-cols-3 items-center border-b border-gray-300 py-1.5 text-[11px] sm:text-[13px]">
+                            <div class="text-gray-600 font-bold pr-2">صالحة لغاية</div>
+                            <div class="font-black text-center font-mono">{{ v.validUntil }}</div>
+                            <div class="text-gray-500 text-left pl-2 font-mono">Valid until</div>
+                        </div>
+                        <div
+                            class="grid grid-cols-3 items-center border-b border-gray-300 py-1.5 text-[11px] sm:text-[13px] bg-gray-50 dark:bg-gray-800/40">
+                            <div class="text-gray-600 font-bold pr-2">مدة الإقامة</div>
+                            <div class="font-black text-center">{{ v.durationOfStay }}</div>
+                            <div class="text-gray-500 text-left pl-2 font-mono">Duration of Stay</div>
+                        </div>
+                        <div
+                            class="grid grid-cols-3 items-center border-b border-gray-300 py-1.5 text-[11px] sm:text-[13px]">
+                            <div class="text-gray-600 font-bold pr-2">رقم جواز السفر</div>
+                            <div class="font-black text-center font-mono">{{ v.passportNo }}</div>
+                            <div class="text-gray-500 text-left pl-2 font-mono">Passport No.</div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="w-24 sm:w-32 border border-gray-300 rounded-sm overflow-hidden p-0.5 shrink-0 bg-white dark:bg-gray-800 flex items-center justify-center">
+                        <img *ngIf="v.image_url" [src]="v.image_url" alt="صورة صاحب التأشيرة"
+                            class="w-full h-full object-cover" />
+                        <div *ngIf="!v.image_url" class="text-gray-300">
+                            <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-300 mt-4">
+                    <div
+                        class="grid grid-cols-3 items-center border-b border-gray-300 py-1.5 text-[11px] sm:text-[13px]">
+                        <div class="text-gray-600 font-bold pr-2">مصدر التأشيرة</div>
+                        <div class="font-black text-center text-gray-800 dark:text-white">{{ v.placeOfIssue }}</div>
+                        <div class="text-gray-500 text-left pl-2 font-mono">Place of issue</div>
+                    </div>
+                    <div
+                        class="grid grid-cols-3 items-center border-b border-gray-300 py-1.5 text-[11px] sm:text-[13px] bg-gray-50/50 dark:bg-gray-800/20">
+                        <div class="text-gray-600 font-bold pr-2">الاسم</div>
+                        <div class="font-black text-center text-gray-900 dark:text-white">{{ v.name }}</div>
+                        <div class="text-gray-500 text-left pl-2 font-mono">Name</div>
+                    </div>
+                    <div
+                        class="grid grid-cols-3 items-center border-b border-gray-300 py-1.5 text-[11px] sm:text-[13px]">
+                        <div class="text-gray-600 font-bold pr-2">الجنسية</div>
+                        <div class="font-black text-center">{{ v.nationality }}</div>
+                        <div class="text-gray-500 text-left pl-2 font-mono">Nationality</div>
+                    </div>
+                    <div
+                        class="grid grid-cols-3 items-center border-b border-gray-300 py-1.5 text-[11px] sm:text-[13px]">
+                        <div class="text-gray-600 font-bold pr-2">تاريخ الميلاد</div>
+                        <div class="font-black text-center font-mono">{{ v.birthDate }}</div>
+                        <div class="text-gray-500 text-left pl-2 font-mono">Birth Date</div>
+                    </div>
+                    <div
+                        class="grid grid-cols-3 items-center border-b border-gray-300 py-1.5 text-[11px] sm:text-[13px]">
+                        <div class="text-gray-600 font-bold pr-2">نوع التأشيرة</div>
+                        <div class="font-black text-center">{{ v.typeOfVisa }}</div>
+                        <div class="text-gray-500 text-left pl-2 font-mono">Type Of Visa</div>
+                    </div>
+                    <div
+                        class="grid grid-cols-3 items-center border-b border-gray-300 py-1.5 text-[11px] sm:text-[13px]">
+                        <div class="text-gray-600 font-bold pr-2">عدد مرات الدخول</div>
+                        <div class="font-black text-center">{{ v.entryType }}</div>
+                        <div class="text-gray-500 text-left pl-2 font-mono">Entry Type</div>
+                    </div>
+                </div>
+
+                <div class="mt-4 border-t border-gray-300 pt-3 text-[11px] sm:text-[13px]">
+                    <div class="grid grid-cols-3 items-center py-2">
+                        <div class="text-gray-600 font-bold pr-2">رقم التأشيرة / الإقامة</div>
+                        <div
+                            class="bg-gray-100 dark:bg-gray-800 font-black text-center py-1.5 rounded-sm font-mono text-sm shadow-inner">
+                            {{ v.applicationNo }}</div>
+                        <div class="text-gray-500 text-left pl-2 font-mono">Residence / Visa Number</div>
+                    </div>
+                    <div class="grid grid-cols-3 items-center py-2">
+                        <div class="text-gray-600 font-bold pr-2">تاريخ الانتهاء</div>
+                        <div
+                            class="bg-gray-100 dark:bg-gray-800 font-black text-center py-1.5 rounded-sm font-mono shadow-inner">
+                            {{ convertToHijri(v.validUntil) }}</div>
+                        <div class="text-gray-500 text-left pl-2 font-mono">Expiry Date</div>
+                    </div>
+                </div>
+
+                <div
+                    class="my-4 text-purple-700/60 font-mono text-[10px] sm:text-[12px] tracking-[0.4em] text-center overflow-hidden whitespace-nowrap">
+                    ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+                </div>
+
+                <div class="mt-4 flex flex-col items-center">
+                    <div class="w-full flex justify-between text-[10px] text-gray-500 px-2 font-bold">
+                        <span>رقم التأشيرة</span>
+                        <span>Visa No.</span>
+                    </div>
+                    <div class="w-full max-w-[340px] flex flex-col items-center mt-1">
+                        <svg class="w-full h-9 text-black dark:text-white" viewBox="0 0 100 20"
+                            preserveAspectRatio="none">
+                            <rect x="0" y="0" width="1.5" height="20" fill="currentColor" />
+                            <rect x="3" y="0" width="1" height="20" fill="currentColor" />
+                            <rect x="5" y="0" width="2.5" height="20" fill="currentColor" />
+                            <rect x="9" y="0" width="1" height="20" fill="currentColor" />
+                            <rect x="11" y="0" width="2" height="20" fill="currentColor" />
+                            <rect x="14" y="0" width="3.5" height="20" fill="currentColor" />
+                            <rect x="19" y="0" width="1" height="20" fill="currentColor" />
+                            <rect x="21" y="0" width="2" height="20" fill="currentColor" />
+                            <rect x="24" y="0" width="1" height="20" fill="currentColor" />
+                            <rect x="27" y="0" width="3" height="20" fill="currentColor" />
+                            <rect x="31" y="0" width="1" height="20" fill="currentColor" />
+                            <rect x="34" y="0" width="2" height="20" fill="currentColor" />
+                            <rect x="37" y="0" width="2" height="20" fill="currentColor" />
+                            <rect x="41" y="0" width="1" height="20" fill="currentColor" />
+                            <rect x="44" y="0" width="3" height="20" fill="currentColor" />
+                            <rect x="48" y="0" width="1.5" height="20" fill="currentColor" />
+                            <rect x="51" y="0" width="1" height="20" fill="currentColor" />
+                            <rect x="54" y="0" width="3" height="20" fill="currentColor" />
+                            <rect x="58" y="0" width="1" height="20" fill="currentColor" />
+                            <rect x="61" y="0" width="2" height="20" fill="currentColor" />
+                            <rect x="64" h="0" width="3.5" height="20" fill="currentColor" />
+                            <rect x="69" y="0" width="1" height="20" fill="currentColor" />
+                            <rect x="71" y="0" width="2" height="20" fill="currentColor" />
+                            <rect x="75" y="0" width="1" height="20" fill="currentColor" />
+                            <rect x="78" y="0" width="3" height="20" fill="currentColor" />
+                            <rect x="82" y="0" width="1" height="20" fill="currentColor" />
+                            <rect x="85" y="0" width="2" height="20" fill="currentColor" />
+                            <rect x="89" y="0" width="1" height="20" fill="currentColor" />
+                            <rect x="92" y="0" width="3" height="20" fill="currentColor" />
+                            <rect x="96" y="0" width="1" height="20" fill="currentColor" />
+                        </svg>
+                        <span class="font-mono text-xs font-black tracking-widest mt-0.5">{{ v.visaNo }}</span>
+                    </div>
+                </div>
+
+                <div
+                    class="mt-4 bg-red-50 border border-red-100 rounded-sm p-3 text-center text-[10px] sm:text-[11.5px] text-red-900 leading-normal font-bold">
+                    غير مصرح بالحج أو الإقامة في مكة المكرمة خلال فترة موسم الحج (من 15 ذي القعدة إلى 15 ذي الحجة)
+                    <br>
+                    <span class="font-mono text-[9.5px] sm:text-[10.5px] text-gray-700 font-normal">Not permitted to
+                        perform Hajj or to stay in Makkah during Hajj season (from 15 Dhu al-Qadah to 15 Dhu
+                        al-Hijjah)</span>
+                </div>
+
+                <div class="mt-4 text-center px-2">
+                    <p class="text-red-600 font-bold text-[11px] sm:text-[13px] leading-tight">أتعهد بأني حاصل على إقامة
+                        "سارية المفعول" لمدة لا تقل عن ثلاثة أشهر و بياناتها كالآتي</p>
+                    <p class="text-red-500/90 font-mono text-[9px] sm:text-[11px] mt-0.5 leading-tight" dir="ltr">I
+                        undertake that I had a "valid" residence for no less than three months and its details as
+                        follows</p>
+                </div>
+
+                <div
+                    class="my-6 text-purple-700/60 font-mono text-[10px] sm:text-[12px] tracking-[0.4em] text-center overflow-hidden whitespace-nowrap">
+                    ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+                </div>
+
+                <div class="grid grid-cols-3 items-center mt-4 border-b border-gray-200 pb-6">
+                    <div class="text-right text-[10px] sm:text-[11px] text-gray-500 font-mono leading-tight">
+                        For Visa Inquiry<br>Please scan QR code
+                    </div>
+                    <div class="flex justify-center">
+                        <div
+                            class="w-20 h-20 bg-gray-100 border border-gray-300 p-1 flex items-center justify-center rounded-sm">
+                            <svg class="w-full h-full text-gray-700" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13 1h1v1h-1v-1zm-2-2h2v2h-2v-2zm2 4h2v2h-2v-2zm-2 0h1v1h-1v-1zm4-4h1v1h-1v-1zm-2-2h1v1h-1v-1zm4 2h1v4h-1v-4zm-4 4h2v1h-2v-1zm-2-4h1v1h-1v-1zm2-2h1v1h-1v-1z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="text-left text-[10px] sm:text-[11px] text-gray-500 leading-tight">
+                        للإستعلام عن التأشيرة<br>يرجى مسح رمز الاستجابة السريعة
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center font-mono text-[10px] sm:text-[13px] font-bold tracking-widest text-gray-800 dark:text-gray-200 uppercase leading-relaxed"
+                    dir="ltr">
+                    1&lt;{{ v.nationality }}{{ v.name ? v.name.split(' ').join('&lt;') : 'MOHAMED&lt;OMAYMA'
+                    }}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+                    <br>
+                    {{ v.passportNo }}{{ v.nationality }}{{ v.birthDate ? v.birthDate.split('/').join('') : '11091998'
+                    }}32040320258&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;04
+                </div>
+
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3 mt-6 justify-center print:hidden">
+            <button (click)="onPrint()"
+                class="bg-[#006C35] hover:bg-[#004B23] text-white font-black px-8 py-2.5 rounded-lg transition text-[14px] shadow-sm">
+                طباعة الوثيقة الرسمية
+            </button>
+            <button (click)="goBack()"
+                class="border border-gray-300 bg-white text-gray-700 font-black px-8 py-2.5 rounded-lg transition text-[14px] hover:bg-gray-50 shadow-sm">
+                استعلام جديد
+            </button>
+        </div>
+
+    </ng-container>
+</div>

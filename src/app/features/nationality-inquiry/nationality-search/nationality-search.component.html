@@ -1,0 +1,100 @@
+<div class="bg-white dark:bg-gray-900 min-h-screen px-4 md:px-8 py-6">
+    <div class="max-w-[900px] mx-auto">
+
+        <nav class="text-[13px] text-gray-500 dark:text-gray-400 font-bold mb-4 flex items-center gap-1.5 flex-wrap">
+            <a href="/e-services" class="hover:text-[#006C35] dark:hover:text-green-400 transition">الاستعلامات
+                الإلكترونية</a>
+            <span>&gt;</span>
+            <a href="/civil-status" class="hover:text-[#006C35] dark:hover:text-green-400 transition">الأحوال
+                المدنية</a>
+            <span>&gt;</span>
+            <span class="text-gray-700 dark:text-gray-300">الإستعلام عن معاملة في الأحوال المدنية</span>
+        </nav>
+
+        <h1
+            class="text-2xl md:text-3xl font-black text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
+            الاستفسار عن الموافقة على الجنسية
+        </h1>
+
+        <p class="text-gray-600 dark:text-gray-400 text-[15px] leading-8 mb-8">
+            تتيح هذه الخدمة الإلكترونية إمكانية الإستعلام عن أحقية إصدار بطاقة الأحوال لغير السعوديين.
+        </p>
+
+        <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm">
+            <div class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+                <h2 class="text-lg font-black text-gray-900 dark:text-white">معلومات شخصية</h2>
+            </div>
+
+            <div class="p-6">
+
+                <div
+                    class="bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900 text-blue-800 dark:text-blue-300 text-[14px] font-bold rounded-lg px-4 py-3 mb-4">
+                    الرجاء إدخال رقم الهوية ورقم الصادر, ثم اضغط على عرض.
+                </div>
+
+                <div
+                    class="border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2 mb-6 text-[13px] font-bold text-gray-700 dark:text-gray-300">
+                    <span class="text-red-500">*</span> حقول مطلوبة
+                </div>
+
+                <div *ngIf="errorMsg"
+                    class="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-300 text-[14px] font-bold rounded-lg px-4 py-3 mb-6">
+                    {{ errorMsg }}
+                </div>
+
+                <form (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[14px] font-black text-gray-800 dark:text-gray-200">
+                            رقم الهوية <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" [(ngModel)]="identityNumber" name="identityNumber"
+                            placeholder="أدخل رقم الهوية"
+                            class="w-full md:w-1/2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg px-4 py-2.5 text-[14px] text-start focus:outline-none focus:ring-2 focus:ring-[#006C35]" />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[14px] font-black text-gray-800 dark:text-gray-200">
+                            رقم الصادر <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" [(ngModel)]="sourceNumber" name="sourceNumber"
+                            placeholder="أدخل الرقم الصادر"
+                            class="w-full md:w-1/2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg px-4 py-2.5 text-[14px] text-start focus:outline-none focus:ring-2 focus:ring-[#006C35]" />
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <button type="button" (click)="generateCaptcha()"
+                            class="p-2 text-[#006C35] dark:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition shrink-0"
+                            aria-label="تحديث الرمز">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                        </button>
+                        <canvas #captchaCanvas width="150" height="55"
+                            class="rounded-lg border border-gray-300 dark:border-gray-600"></canvas>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[14px] font-black text-gray-800 dark:text-gray-200">
+                            الرمز المرئي <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" [(ngModel)]="captchaInput" name="captchaInput"
+                            class="w-full md:w-1/3 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg px-4 py-2.5 text-[14px] text-start focus:outline-none focus:ring-2 focus:ring-[#006C35]" />
+                    </div>
+
+                    <div class="flex flex-col gap-3 pt-2">
+                        <button type="submit" [disabled]="loading"
+                            class="w-full bg-[#006C35] hover:bg-[#004B23] disabled:opacity-60 text-white font-black py-3 rounded-lg transition text-[15px]">
+                            {{ loading ? 'جاري البحث...' : 'عرض' }}
+                        </button>
+                        <button type="button" (click)="onClear()"
+                            class="w-full bg-[#006C35] hover:bg-[#004B23] text-white font-black py-3 rounded-lg transition text-[15px]">
+                            مسح
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

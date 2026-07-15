@@ -1,0 +1,42 @@
+<div class="max-w-7xl mx-auto px-6 sm:px-12 py-12 bg-white dark:bg-gray-950 transition-colors duration-300" dir="rtl">
+
+    <!-- الجزء العلوي: العنوان والوصف -->
+    <div class="text-right w-full mb-12 space-y-4">
+        <h2 class="text-2xl sm:text-3xl font-black text-gray-900 dark:text-gray-100 tracking-tight">
+            {{ sectionHeader.title }}
+        </h2>
+        <p
+            class="text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed font-normal text-justify w-full">
+            {{ sectionHeader.description }}
+        </p>
+    </div>
+
+    <!-- شبكة الإحصائيات -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 justify-center items-start">
+        <div *ngFor="let item of stats" class="flex flex-col items-center text-center group">
+
+            <!-- خلفية الأيقونة والدائرة -->
+            <div
+                class="w-12 h-12 rounded-full bg-emerald-50/60 dark:bg-emerald-950/40 flex items-center justify-center mb-5 border border-emerald-100/40 dark:border-emerald-900/30 transition duration-300 group-hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 dark:text-emerald-400"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="item.iconPath" />
+                </svg>
+            </div>
+
+            <!-- الرقم الإحصائي -->
+            <div
+                class="text-emerald-900 dark:text-emerald-500 font-black text-3xl sm:text-4xl md:text-5xl tracking-tight mb-3">
+                {{ item.number }}
+            </div>
+
+            <!-- نص الإحصائية -->
+            <p
+                class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm font-medium leading-relaxed max-w-[240px] mx-auto">
+                {{ item.label }}
+            </p>
+
+        </div>
+    </div>
+
+</div>

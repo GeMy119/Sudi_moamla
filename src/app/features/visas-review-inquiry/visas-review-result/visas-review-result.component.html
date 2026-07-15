@@ -1,0 +1,170 @@
+<div
+    class="min-h-screen py-4 md:py-8 px-2 md:px-4 flex flex-col items-center gap-6 bg-gray-100 dark:bg-gray-900 select-none">
+
+    <style>
+        @media print {
+
+            body *,
+            html * {
+                visibility: hidden;
+            }
+
+            #visa-table-to-print,
+            #visa-table-to-print * {
+                visibility: visible;
+            }
+
+            #visa-table-to-print {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+                background-color: #FFFF88 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+
+    <div id="visa-table-to-print"
+        class="w-full max-w-[700px] overflow-x-auto border border-gray-400 shadow-md rounded-sm p-4 md:p-6"
+        style="background-color: #FFFF88; direction: rtl;">
+
+        <div class="min-w-[600px]">
+
+            <div class="flex items-start justify-between mb-4 gap-4">
+                <div class="flex-1 flex flex-col items-start text-start text-black">
+                    <img src="/logoAmal.svg" alt="وزارة العمل" class="w-20 h-20 object-contain mb-1" />
+                </div>
+
+                <div class="shrink-0 flex items-start gap-4">
+                    <div class="flex-1 flex flex-col items-start gap-0.5 text-black">
+
+                        <div class="text-[13px] font-bold">
+                            <span class="inline-block min-w-[75px]">رقم الصادر :</span>
+                            <span class="font-medium">{{ result?.employer?.source_number || '—' }}</span>
+                        </div>
+                        <div class="text-[13px] font-bold">
+                            <span class="inline-block min-w-[75px]">التــاريــخ :</span>
+                            <span class="font-medium">{{ convertToHijri(result?.employer?.createdAt) }}</span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mb-6 text-black">
+                <h1 class="text-[16px] font-bold tracking-tight mb-0.5">تذكرة مراجعة تأشيرات</h1>
+                <p class="text-[14px] font-bold tracking-wide mb-1">نظام سداد للمدفوعات الحكومية</p>
+                <div class="text-[14px] font-bold">
+                    <span>مكتب عمل الـريـاض</span>
+                    <span class="mx-4">|</span>
+                    <span>المرجع /</span>
+                    <span class="font-medium text-gray-900"> {{ result?.employer?.reference_number || '٦٧٠٧٨٦٧٠'
+                        }}</span>
+                </div>
+            </div>
+
+            <div class="text-[14px] font-bold text-black leading-7 mb-4 px-2">
+                <div class="mb-1">
+                    <span class="text-gray-900">حيث تقررت الموافقة على طلب : </span>
+                    <span class="font-medium">{{ result?.employer?.company_name || result?.employer?.name || '—'
+                        }}</span>
+                </div>
+                <div class="flex justify-between items-center gap-4">
+                    <div>
+                        <span class="text-gray-900">رقم صاحب العمل : </span>
+                        <span class="font-medium">{{ result?.employer?.identity_number || '—' }}</span>
+                    </div>
+                    <div class="me-12">
+                        <span class="text-gray-900">رقم الملف : </span>
+                        <span class="font-medium">{{ result?.employer?.file_number || '—' }}</span>
+                    </div>
+                </div>
+                <div class="mt-1">
+                    <span class="text-gray-900">المالك : </span>
+                    <span class="font-medium">{{ result?.employer?.name || result?.employer?.company_name || '—'
+                        }}</span>
+                </div>
+            </div>
+
+            <div class="relative border border-black mb-6" style="min-height: 420px;">
+
+                <div
+                    class="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-[0.12] select-none">
+                    <span
+                        class="text-[55px] font-black text-emerald-800 tracking-widest transform -rotate-[28deg] border-4 border-emerald-800 px-6 py-2 rounded-xl">
+                        نسخة للمراجعة
+                    </span>
+                </div>
+
+                <table class="w-full border-collapse text-[14px] text-black relative z-10">
+                    <thead>
+                        <tr class="font-bold border-b border-black">
+                            <th class="py-3 px-3 text-center border-e border-black w-[25%]">جهة القدوم</th>
+                            <th class="py-3 px-3 text-center border-e border-black w-[25%]">الجنسية</th>
+                            <th class="py-3 px-3 text-center border-e border-black w-[35%]">المهنة</th>
+                            <th class="py-3 px-3 text-center w-[15%]">العدد</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of ticketVisaReviews" class="font-medium">
+                            <td class="py-3 px-3 text-center border-e border-black">{{ item.arrival_port || '—' }}</td>
+                            <td class="py-3 px-3 text-center border-e border-black tracking-wide">{{ item.nationality ||
+                                '—' }}</td>
+                            <td class="py-3 px-3 text-center border-e border-black tracking-wide">{{ item.profession ||
+                                '—' }}</td>
+                            <td class="py-3 px-3 text-center font-mono">{{ item.count || '٠٠١' }}</td>
+                        </tr>
+
+                        <tr *ngFor="let empty of emptyRows">
+                            <td class="py-3.5 px-3 border-e border-black">&nbsp;</td>
+                            <td class="py-3.5 px-3 border-e border-black">&nbsp;</td>
+                            <td class="py-3.5 px-3 border-e border-black">&nbsp;</td>
+                            <td class="py-3.5 px-3">&nbsp;</td>
+                        </tr>
+
+                        <tr
+                            *ngIf="(!ticketVisaReviews || ticketVisaReviews.length === 0) && (!emptyRows || emptyRows.length === 0)">
+                            <td colspan="4" class="py-6 text-center text-gray-700 font-bold">
+                                لا توجد تأشيرات مسجلة حالياً لهذا الطلب.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center text-[13px] font-bold text-black leading-6 px-4">
+                ملحوظة تـأمـل وزارة الخارجية مراجعة الممثليات المعنية بعد ثلاثة أيام من تاريـخـه
+                <div class="mt-1 text-[12px] text-gray-900">
+                    صورة الملف رقم ( &nbsp; {{ result?.employer?.file_number || ' ' }} &nbsp; )
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="flex justify-center mt-2 print:hidden">
+        <button (click)="onPrint()"
+            class="bg-[#006C35] hover:bg-[#004B23] text-white font-black px-8 py-2.5 rounded-lg transition text-[14px] shadow-sm tracking-wide">
+            طباعة تذكرة التأشيرات
+        </button>
+    </div>
+
+    <div
+        class="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden print:hidden">
+        <div
+            class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-3 grid grid-cols-[180px_1fr] gap-4 text-[13px] font-black text-gray-700 dark:text-gray-300">
+            <span>حالة الإقامة</span>
+            <span>التفاصيل</span>
+        </div>
+        <div *ngFor="let item of statusLegend"
+            class="grid grid-cols-[180px_1fr] gap-4 px-6 py-4 text-[13px] leading-7 border-b border-gray-100 dark:border-gray-800 last:border-0">
+            <span class="font-black text-gray-800 dark:text-gray-200">{{ item.label }}</span>
+            <span class="text-gray-600 dark:text-gray-400">{{ item.desc }}</span>
+        </div>
+    </div>
+
+</div>
