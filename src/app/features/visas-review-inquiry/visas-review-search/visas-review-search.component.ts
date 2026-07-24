@@ -102,24 +102,7 @@ export class VisasReviewSearchComponent {
       },
     });
   }
-  convertToHijri(dateString: any): string {
-    if (!dateString) return '—';
-
-    try {
-      const date = new Date(dateString);
-
-      // استخدام نظام أم القرى المدمج في المتصفح لتنسيق التاريخ هجري
-      const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      });
-
-      return formatter.format(date); // هيطلعلك النتيجة زي: ١٤٤٥/١١/١٨
-    } catch (error) {
-      return '—';
-    }
-  }
+  
 
   onClear(): void {
     this.identityNumber = '';

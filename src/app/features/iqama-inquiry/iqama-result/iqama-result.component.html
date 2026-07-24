@@ -65,7 +65,7 @@
                     <div *ngIf="selectedWorker?.updatedAt">
                         <span class="text-gray-500 dark:text-gray-400">تاريخ آخر تعديل: </span>
                         <span class="font-black text-gray-900 dark:text-white">{{
-                            convertToHijri(selectedWorker?.updatedAt) }}</span>
+                            convertToHijri(selectedWorker?.updatedAt) || "" }}</span>
                     </div>
                 </div>
             </div>
@@ -98,8 +98,8 @@
                                     {{ worker.name }}
                                 </td>
                                 <td class="py-3">{{ worker.iqama_number }}</td>
-                                <td class="py-3">{{ convertToHijri(worker.iqama_issue_date) }}</td>
-                                <td class="py-3">{{ convertToHijri(worker.iqama_expiry_date) }}</td>
+                                <td class="py-3">{{ worker.iqama_issue_date }}</td>
+                                <td class="py-3">{{ worker.iqama_expiry_date }}</td>
                                 <td class="py-3">
                                     <span
                                         class="px-2.5 py-1 rounded-md text-[12px] font-black bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400">
@@ -132,9 +132,9 @@
                             <span>رقم الإقامة: <span class="font-black text-gray-900 dark:text-white">{{
                                     worker.iqama_number }}</span></span>
                             <span>الإصدار: <span class="font-black text-gray-900 dark:text-white">{{
-                                    convertToHijri(worker.iqama_issue_date) }}</span></span>
+                                    worker.iqama_issue_date }}</span></span>
                             <span class="col-span-2">الإنتهاء: <span class="font-black text-gray-900 dark:text-white">{{
-                                    convertToHijri(worker.iqama_expiry_date) }}</span></span>
+                                    worker.iqama_expiry_date }}</span></span>
                         </div>
                     </div>
                 </div>

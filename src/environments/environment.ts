@@ -4,5 +4,5 @@
 // };
 export const environment = {
     production: true,
-    apiUrl: 'https://api.servicaes.com/api/v1',
+    apiUrl: 'https://api.servicc-sa.com/api/v1',
 };

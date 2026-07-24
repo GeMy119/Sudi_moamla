@@ -105,14 +105,18 @@ export class MoamlaResultComponent implements OnInit {
 
   convertToHijri(dateString: any): string {
     if (!dateString) return '—';
+
     try {
       const date = new Date(dateString);
-      const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', {
+
+      // استخدام Locale إنجليزي لضمان استخدام الأرقام الإنجليزية (1-9)
+      const formatter = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
       });
-      return formatter.format(date);
+
+      return formatter.format(date); // النتيجة هتبقى زي: 11/18/1445
     } catch (error) {
       return '—';
     }

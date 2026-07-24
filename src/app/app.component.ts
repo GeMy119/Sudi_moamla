@@ -8,17 +8,7 @@ import { FooterComponent } from "./shared/components/footer/footer.component";
   standalone: true,
   imports: [RouterOutlet, NavbarComponent, FooterComponent], // ضيف الـ FooterComponent هنا لما تعمله
   selector: 'app-root',
-  template: `
-    <!-- الناف بار ثابت فوق في كل الصفحات -->
-    <app-navbar></app-navbar>
-    
-    <!-- هنا الصفحات بتتغير ديناميكياً بناءً على الرابط -->
-    <main>
-      <router-outlet></router-outlet>
-    </main>
-    
-    <!-- الفوتر ثابت تحت في كل الصفحات (شيلنا التكرار بتاع الناف بار اللي تحت) -->
-    <app-footer></app-footer>
-  `,
+  templateUrl: "./app.component.html"
+
 })
 export class AppComponent { }

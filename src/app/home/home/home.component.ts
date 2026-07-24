@@ -12,7 +12,6 @@ import { EventsSliderComponent } from "../events-slider/events-slider.component"
   imports: [HeroComponent, StatsComponent, NewsComponent, RoyalStatementBannerComponent, EventsSliderComponent],
   template: `
     <app-hero></app-hero>
-
     <app-stats></app-stats>
     <app-royal-statement-banner></app-royal-statement-banner>
     <app-news></app-news>

@@ -1,5 +1,6 @@
 <div class="bg-[#F8F9FA] min-h-screen px-1 py-2 md:px-4 md:py-10" dir="rtl">
-    <div
+    <!-- أضفنا id="print-section" هنا لتحديد الجزء المطلوب طباعته -->
+    <div id="print-section"
         class="max-w-[1000px] w-full mx-auto bg-white border border-gray-300 rounded-sm shadow-sm p-4 md:p-12 font-sans text-right text-gray-900">
 
         <!-- لوحة جاري التحميل والخطأ -->
@@ -15,26 +16,20 @@
 
         <ng-container *ngIf="!loading && result">
 
-            <!-- القسم الأول: الرأس والبيانات الشخصية - بناء شبكي صارم طبقاً لملف 042d148f-2026-41eb-809d-ba34ecd04480_2.png -->
+            <!-- القسم الأول: الرأس والبيانات الشخصية -->
             <div class="relative pb-4 mb-4 border-b border-gray-200">
-
-                <!-- تقسيم السطر العلوي إلى عمودين ثابتين: يمين للشعار والاسم، ويسار للصورة الشخصية -->
                 <div class="grid grid-cols-2 items-start w-full">
-
-                    <!-- الجانب الأيمن بالكامل: الاسم وشعار الأحوال والبيانات -->
                     <div class="flex flex-col items-start w-full">
-                        <!-- جملة تفاصيل الاسم في الأعلى يميناً -->
-                        <span class="text-[13px] md:text-[17px] font-bold text-gray-900 block mb-0">تفاصيل || {{
-                            result.name }}</span>
+                        <span class="text-[13px] md:text-[17px] font-bold text-gray-900 block mb-0">
+                            تفاصيل || {{ result.name }}
+                        </span>
 
-                        <!-- حاوية الشعار: تم إجبار الحجم على التكبير الصريح وإلغاء أي هوامش زائدة (mt-0 mb-0 py-0) -->
                         <div class="block w-full py-0 my-0 text-right">
                             <img src="/ahwal.png" alt="الأحوال المدنية"
                                 class="w-36 h-36 md:w-52 md:h-52 object-contain text-right inline-block"
                                 style="max-width: none !important;" />
                         </div>
 
-                        <!-- تفاصيل المعاملة والباركود ملتصقة أسفل الشعار مباشرة -->
                         <div class="w-full flex flex-col gap-1 -mt-2">
                             <div class="text-[11px] md:text-[16px] font-bold text-gray-900 leading-tight">
                                 {{ isApproved ? 'تمت الموافقة على منحة الجنسية السعودية' : 'تم رفض طلب منحة الجنسية
@@ -47,7 +42,6 @@
                                     class="bg-black" [style.width.px]="bar" [style.height.%]="100"></div>
                             </div>
 
-                            <!-- شبكة بيانات المعاملة -->
                             <div class="flex flex-col gap-0.5 text-[10.5px] md:text-[14px] mt-0.5">
                                 <div class="flex items-center">
                                     <span class="text-gray-950 font-bold min-w-[70px] md:min-w-[110px]">رقم
@@ -59,7 +53,7 @@
                                     <span class="text-gray-950 font-bold min-w-[70px] md:min-w-[110px]">تاريخ
                                         الإصدار</span>
                                     <span class="text-gray-950 font-bold font-mono">: {{
-                                        convertToHijri(result.issue_date) }}</span>
+                                        result.issue_date}}</span>
                                 </div>
                                 <div class="flex items-center">
                                     <span class="text-gray-950 font-bold min-w-[70px] md:min-w-[110px]">الجهة
@@ -70,7 +64,7 @@
                         </div>
                     </div>
 
-                    <!-- الجانب الأيسر بالكامل: يحتوي فقط على الصورة الشخصية محاذية لليسار وللأعلى -->
+                    <!-- الصورة الشخصية -->
                     <div class="flex justify-end w-full pt-1">
                         <div
                             class="w-24 h-32 md:w-36 md:h-44 border border-gray-300 p-0.5 bg-white shadow-xs overflow-hidden">
@@ -85,7 +79,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -148,9 +141,21 @@
                         <button class="text-gray-400 cursor-not-allowed">التالي</button>
                     </div>
                 </div>
+
+                <!-- زر الطباعة في منتصف الصفحة تحت جدول البيانات مباشرة -->
+                <div class="flex justify-center mt-6 no-print">
+                    <button (click)="printPage()"
+                        class="flex items-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm px-6 py-2 rounded shadow-md transition-all">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 002-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                        </svg>
+                        طباعة
+                    </button>
+                </div>
             </div>
 
-            <!-- القسم الثالث: الشروط والبنود القانونية بالأسفل -->
+            <!-- القسم الثالث: الشروط والبنود القانونية -->
             <div
                 class="mt-6 pt-3 border-t border-gray-200 text-[11px] md:text-[13.5px] leading-[1.8] md:leading-[2.2] text-gray-900 font-medium">
                 <p class="font-bold mb-1.5 text-gray-950">

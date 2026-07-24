@@ -1,0 +1,30 @@
+@media print {
+
+    /* إخفاء كل أجزاء الصفحة الخارجية عند الطباعة */
+    body * {
+        visibility: hidden;
+    }
+
+    /* إظهار كارت البيانات فقط وأطفاله */
+    #print-section,
+    #print-section * {
+        visibility: visible;
+    }
+
+    /* تحديد موقع كارت البيانات أعلى الصفحة المطبوعة */
+    #print-section {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* إخفاء زر الطباعة نهائياً في الورقة المطبوعة */
+    .no-print {
+        display: none !important;
+    }
+}
