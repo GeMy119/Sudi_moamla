@@ -1,24 +1,20 @@
-
 import { Component, OnInit } from '@angular/core';
-import { Worker, WorkersByEmployerResponse } from '../../../core/models/worker.model';
+import { ProfessionChangeResponse, Worker } from '../../../core/models/worker.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IqamaInquiryService } from '../../iqama-inquiry/iqama-inquiry.service';
 import { CommonModule } from '@angular/common';
+import { ProfessionInquiryService } from '../profession-inquiry.service';
 
 @Component({
   selector: 'app-profession-result',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './profession-result.component.html',
   styleUrl: './profession-result.component.css'
 })
-export class professionResultComponent implements OnInit {
-  result: WorkersByEmployerResponse | null = null;
-  selectedWorker: Worker | null = null;
+export class ProfessionResultComponent implements OnInit {
+  result: ProfessionChangeResponse | null = null;
   loading = true;
   errorMsg = '';
-
-  // كل العمال
-  allWorkers: Worker[] = [];
 
   statusLegend = [
     { label: 'سارية المفعول', desc: 'يقصد بها إحدى الحالتين التاليتين: 1- لايوجد أي قيود أو بلاغ على الإقامة. 2- الوافد المقيم يعمل بشكل نظامي.' },
@@ -32,12 +28,12 @@ export class professionResultComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private iqamaService: IqamaInquiryService
+    private professionService: ProfessionInquiryService
   ) { }
 
   ngOnInit(): void {
-    if (this.iqamaService.lastResult) {
-      this.setResult(this.iqamaService.lastResult);
+    if (this.professionService.lastResult) {
+      this.setResult(this.professionService.lastResult);
       return;
     }
 
@@ -49,60 +45,51 @@ export class professionResultComponent implements OnInit {
       return;
     }
 
-    this.iqamaService.search(identityNumber, sourceNumber).subscribe({
+    this.professionService.search(identityNumber, sourceNumber).subscribe({
       next: (res) => this.setResult(res),
       error: () => {
-        this.errorMsg = 'تعذر إيجاد بيانات صاحب العمل.';
+        this.errorMsg = 'تعذر إيجاد بيانات طلب تغيير المهنة.';
         this.loading = false;
       },
     });
   }
 
-  private setResult(res: WorkersByEmployerResponse): void {
+  private setResult(res: ProfessionChangeResponse): void {
     this.result = res;
-    this.allWorkers = res.data ?? [];
-    this.selectedWorker = this.workersWithAlerts[0] ?? null;
+
     this.loading = false;
   }
 
-  // العمال اللي عندهم بلاغ فعلي بس
-  get workersWithAlerts(): Worker[] {
-    return this.allWorkers.filter(w => !!w.profession_changes);
-  }
 
-  selectWorker(worker: Worker): void {
-    this.selectedWorker = worker;
-  }
 
   onPrint(): void {
     window.print();
   }
 
   onEnd(): void {
-    if (!this.selectedWorker) return;
-    const confirmed = confirm(`هل تريد إنهاء خدمة ${this.selectedWorker.name}؟`);
+    if (!this.result) return;
+    const confirmed = confirm(`هل تريد إنهاء خدمة ${this.result.worker.name}؟`);
     if (confirmed) {
-      console.log('تم تأكيد إنهاء الخدمة لـ', this.selectedWorker.iqama_number);
+      console.log('تم تأكيد إنهاء الخدمة لـ', this.result.worker.identity_number);
     }
   }
 
   goBack(): void {
     this.router.navigate(['/profession-inquiry']);
   }
+
   convertToHijri(dateString: any): string {
     if (!dateString) return '—';
 
     try {
       const date = new Date(dateString);
-
-      // استخدام Locale إنجليزي لضمان استخدام الأرقام الإنجليزية (1-9)
       const formatter = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
       });
 
-      return formatter.format(date); // النتيجة هتبقى زي: 11/18/1445
+      return formatter.format(date); // النتيجة: 11/18/1445
     } catch (error) {
       return '—';
     }

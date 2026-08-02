@@ -1,8 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IqamaInquiryService } from '../../iqama-inquiry/iqama-inquiry.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AlertInquiryService } from '../alert-inquiry.service';
 
 @Component({
   selector: 'app-alert-search',
@@ -21,7 +21,7 @@ export class AlertSearchComponent {
   loading = false;
   errorMsg = '';
 
-  constructor(private iqamaService: IqamaInquiryService, private router: Router) { }
+  constructor(private alertService: AlertInquiryService, private router: Router) { }
 
   ngOnInit(): void {
     setTimeout(() => this.generateCaptcha(), 0);
@@ -86,7 +86,7 @@ export class AlertSearchComponent {
     }
 
     this.loading = true;
-    this.iqamaService.search(this.identityNumber.trim(), this.sourceNumber.trim()).subscribe({
+    this.alertService.search(this.identityNumber.trim(), this.sourceNumber.trim()).subscribe({
       next: () => {
         this.loading = false;
         this.router.navigate(['/alert-inquiry/result'], {

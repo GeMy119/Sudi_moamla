@@ -182,7 +182,7 @@
 
                     <a *ngIf="!item.hasDropdown" [routerLink]="item.link"
                         routerLinkActive="bg-[#006C35] text-white border-b-4 border-[#004B23] rounded-t-xl shadow-sm font-black"
-                        class="flex items-center gap-1.5 px-5 py-3.5 text-[13px] text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-bold cursor-pointer">
+                        class="flex items-center gap-1.5 px-5 py-3.5 text-[13px] text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-black rounded-xl font-bold cursor-pointer">
                         {{ item.label }}
                     </a>
 
@@ -199,7 +199,7 @@
                         <div
                             class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl py-2">
                             <a *ngFor="let child of item.children" [routerLink]="child.link"
-                                class="block px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-700 font-bold text-xs text-gray-700 dark:text-gray-200 hover:text-[#006C35] dark:hover:text-green-400 transition">
+                                class="block px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-700 font-bold text-xs text-gray-700 dark:text-gray-200 hover:text-[#000000] dark:hover:text-green-400 transition">
                                 {{ child.label }}
                             </a>
                         </div>

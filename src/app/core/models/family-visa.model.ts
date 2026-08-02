@@ -14,6 +14,7 @@ export interface FamilyVisa {
     releaseDate: string;
     createdAt?: string;
     updatedAt?: string;
+    age?: number
 }
 
 export interface FamilyVisaWorkerInfo {
@@ -23,13 +24,11 @@ export interface FamilyVisaWorkerInfo {
     employer_name: string;
     employer_identity_number: string;
     employer_source_number: string;
-    employer_company_name: string;
-    employer_address: string;
+    employer: string;
 }
 
 export interface FamilyVisasResponse {
     success: boolean;
-    count: number;
     worker: FamilyVisaWorkerInfo;
-    data: FamilyVisa[];
+    data: FamilyVisa;
 }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Worker, WorkersByEmployerResponse } from '../../../core/models/worker.model';
+import { alertResponse, Worker } from '../../../core/models/worker.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IqamaInquiryService } from '../../iqama-inquiry/iqama-inquiry.service';
 import { CommonModule } from '@angular/common';
+import { AlertInquiryService } from '../alert-inquiry.service';
 
 @Component({
   selector: 'app-alert-result',
@@ -11,13 +11,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './alert-result.component.css'
 })
 export class AlertResultComponent implements OnInit {
-  result: WorkersByEmployerResponse | null = null;
-  selectedWorker: Worker | null = null;
+  result: alertResponse | null = null;
   loading = true;
   errorMsg = '';
 
-  // كل العمال
-  allWorkers: Worker[] = [];
 
   statusLegend = [
     { label: 'سارية المفعول', desc: 'يقصد بها إحدى الحالتين التاليتين: 1- لايوجد أي قيود أو بلاغ على الإقامة. 2- الوافد المقيم يعمل بشكل نظامي.' },
@@ -31,12 +28,12 @@ export class AlertResultComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private iqamaService: IqamaInquiryService
+    private alertService: AlertInquiryService
   ) { }
 
   ngOnInit(): void {
-    if (this.iqamaService.lastResult) {
-      this.setResult(this.iqamaService.lastResult);
+    if (this.alertService.lastResult) {
+      this.setResult(this.alertService.lastResult);
       return;
     }
 
@@ -48,40 +45,28 @@ export class AlertResultComponent implements OnInit {
       return;
     }
 
-    this.iqamaService.search(identityNumber, sourceNumber).subscribe({
+    this.alertService.search(identityNumber, sourceNumber).subscribe({
       next: (res) => this.setResult(res),
       error: () => {
-        this.errorMsg = 'تعذر إيجاد بيانات صاحب العمل.';
+        this.errorMsg = 'تعذر إيجاد بيانات البلاغ.';
         this.loading = false;
       },
     });
   }
 
-  private setResult(res: WorkersByEmployerResponse): void {
+  private setResult(res: alertResponse): void {
     this.result = res;
-    this.allWorkers = res.data ?? [];
-    this.selectedWorker = this.workersWithAlerts[0] ?? null;
     this.loading = false;
   }
-
-  // العمال اللي عندهم بلاغ فعلي بس
-  get workersWithAlerts(): Worker[] {
-    return this.allWorkers.filter(w => !!w.alerts);
-  }
-
-  selectWorker(worker: Worker): void {
-    this.selectedWorker = worker;
-  }
-
   onPrint(): void {
     window.print();
   }
 
   onEnd(): void {
-    if (!this.selectedWorker) return;
-    const confirmed = confirm(`هل تريد إنهاء خدمة ${this.selectedWorker.name}؟`);
+    if (!this.result) return;
+    const confirmed = confirm(`هل تريد إنهاء خدمة ${this.result?.worker.name}؟`);
     if (confirmed) {
-      console.log('تم تأكيد إنهاء الخدمة لـ', this.selectedWorker.iqama_number);
+      console.log('تم تأكيد إنهاء الخدمة لـ', this.result?.worker.identity_number);
     }
   }
 

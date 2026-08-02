@@ -13,7 +13,6 @@ import { Worker, WorkersByEmployerResponse } from '../../../core/models/worker.m
 })
 export class IqamaResultComponent implements OnInit {
   result: WorkersByEmployerResponse | null = null;
-  selectedWorker: Worker | null = null;
   loading = true;
   errorMsg = '';
 
@@ -57,27 +56,19 @@ export class IqamaResultComponent implements OnInit {
 
   private setResult(res: WorkersByEmployerResponse): void {
     this.result = res;
-    this.selectedWorker = res.data[0] ?? null;
     this.loading = false;
   }
 
-  get workers(): Worker[] {
-    return this.result?.data ?? [];
-  }
-
-  selectWorker(worker: Worker): void {
-    this.selectedWorker = worker;
-  }
 
   onPrint(): void {
     window.print();
   }
 
   onEnd(): void {
-    if (!this.selectedWorker) return;
-    const confirmed = confirm(`هل تريد إنهاء خدمة ${this.selectedWorker.name}؟`);
+    if (!this.result) return;
+    const confirmed = confirm(`هل تريد إنهاء خدمة ${this.result.data.name}؟`);
     if (confirmed) {
-      console.log('تم تأكيد إنهاء الخدمة لـ', this.selectedWorker.iqama_number);
+      console.log('تم تأكيد إنهاء الخدمة لـ', this.result.data.iqama_number);
     }
   }
 

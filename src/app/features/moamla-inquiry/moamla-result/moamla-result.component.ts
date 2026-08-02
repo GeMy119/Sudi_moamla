@@ -1,15 +1,10 @@
+import { MoamlaData } from './../../../core/models/worker.model';
 import { Component, OnInit } from '@angular/core';
-import { Worker, WorkersByEmployerResponse } from '../../../core/models/worker.model';
+import { MoamlaTypeResponse, Worker, WorkersByEmployerResponse } from '../../../core/models/worker.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IqamaInquiryService } from '../../iqama-inquiry/iqama-inquiry.service';
 import { CommonModule } from '@angular/common';
-
-interface MoamlaRow {
-  worker: Worker;
-  moamlaId?: string;
-  name?: string;
-  status?: 'rejected' | 'accepted';
-}
+import { MoamlaInquiryService } from '../moamla-inquiry.service';
 
 @Component({
   selector: 'app-moamla-result',
@@ -18,12 +13,10 @@ interface MoamlaRow {
   styleUrl: './moamla-result.component.css'
 })
 export class MoamlaResultComponent implements OnInit {
-  result: WorkersByEmployerResponse | null = null;
-  selectedRow: MoamlaRow | null = null;
+  result: MoamlaTypeResponse | null = null;
   loading = true;
   errorMsg = '';
 
-  allWorkers: Worker[] = [];
 
   statusLegendTitle = 'حالة الموافقة';
   statusLegendText = `تشير حالة الموافقة إلى أن المعاملة قد خضعت للمراجعة من قبل الجهة المختصة، وتم التحقق من البيانات والمستندات واستيفاء جميع المتطلبات والإجراءات اللازمة، وصدر قرار بالموافقة عليها وفقاً للأنظمة والتعليمات المعمول بها. ونؤكد هذه الحالة أن المعاملة أجازت مراحل المعالجة بنجاح، وأصبحت مؤهلة لاستكمال الإجراءات اللاحقة أو الاستفادة من الخدمة المرتبطة بها.
@@ -33,12 +26,12 @@ export class MoamlaResultComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private iqamaService: IqamaInquiryService
+    private moamlaService: MoamlaInquiryService
   ) { }
 
   ngOnInit(): void {
-    if (this.iqamaService.lastResult) {
-      this.setResult(this.iqamaService.lastResult);
+    if (this.moamlaService.lastResult) {
+      this.setResult(this.moamlaService.lastResult);
       return;
     }
 
@@ -50,7 +43,7 @@ export class MoamlaResultComponent implements OnInit {
       return;
     }
 
-    this.iqamaService.search(identityNumber, sourceNumber).subscribe({
+    this.moamlaService.search(identityNumber, sourceNumber).subscribe({
       next: (res) => this.setResult(res),
       error: () => {
         this.errorMsg = 'تعذر إيجاد بيانات صاحب العمل.';
@@ -59,43 +52,23 @@ export class MoamlaResultComponent implements OnInit {
     });
   }
 
-  private setResult(res: WorkersByEmployerResponse): void {
+  private setResult(res: MoamlaTypeResponse): void {
     this.result = res;
-    this.allWorkers = res.data ?? [];
-    this.selectedRow = this.moamlaRows[0] ?? null;
     this.loading = false;
   }
 
-  get moamlaRows(): MoamlaRow[] {
-    const rows: MoamlaRow[] = [];
-    for (const worker of this.allWorkers) {
-      const types = worker.moamla_type ?? [];
-      if (types.length === 0) continue;
-      for (const type of types) {
-        rows.push({
-          worker,
-          moamlaId: type._id,
-          name: type.name,
-          status: type.status,
-        });
-      }
-    }
-    return rows;
-  }
 
-  selectRow(row: MoamlaRow): void {
-    this.selectedRow = row;
-  }
+
 
   onPrint(): void {
     window.print();
   }
 
   onEnd(): void {
-    if (!this.selectedRow) return;
-    const confirmed = confirm(`هل تريد إنهاء خدمة ${this.selectedRow.worker.name}؟`);
+    if (!this.result) return;
+    const confirmed = confirm(`هل تريد إنهاء خدمة ${this.result.data.name}؟`);
     if (confirmed) {
-      console.log('تم تأكيد إنهاء الخدمة لـ', this.selectedRow.worker.iqama_number);
+      console.log('تم تأكيد إنهاء الخدمة لـ', this.result.data.iqama_number);
     }
   }
 

@@ -13,7 +13,7 @@
         <!-- عنوان الصفحة الرئيسي -->
         <div class="mb-6">
             <h6 class="text-base sm:text-xl md:text-2xl font-black text-gray-900 dark:text-white mb-2">
-                خدمة تتيح متابعة والاستعلام عن حالة معامللات الوافدين ومعرفة تفاصيل الاجراء او مرحلة <br> الانجاز حسب
+                خدمة تتيح متابعة والاستعلام عن حالة معاملات الوافدين ومعرفة تفاصيل الاجراء او مرحلة <br> الانجاز حسب
                 البيانات المتوفره
             </h6>
         </div>
@@ -35,24 +35,22 @@
                 class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-4 sm:p-6 md:p-8 mb-6">
                 <h2
                     class="text-[13px] sm:text-lg md:text-xl font-black text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-800 pb-4 mb-4">
-                    تفاصيل العمالة الوافدة || {{ result.employer.company_name }}
+                    تفاصيل العمالة الوافدة || {{ result.company_name || result.name }}
                 </h2>
                 <div
                     class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-[11px] sm:text-[14px] font-bold text-gray-700 dark:text-gray-300 mb-2">
                     <div>
                         <span class="text-gray-500 dark:text-gray-400">رقم هوية الكفيل: </span>
-                        <span class="font-black text-gray-900 dark:text-white">{{ result.employer.identity_number
-                            }}</span>
+                        <span class="font-black text-gray-900 dark:text-white">{{ result.identity_number }}</span>
                     </div>
                     <div>
                         <span class="text-gray-500 dark:text-gray-400">رقم المصدر: </span>
-                        <span class="font-black text-gray-900 dark:text-white">{{ result.employer.source_number
-                            }}</span>
+                        <span class="font-black text-gray-900 dark:text-white">{{ result.source_number }}</span>
                     </div>
                     <div>
                         <span class="text-gray-500 dark:text-gray-400">تاريخ آخر تعديل: </span>
                         <span class="font-black text-gray-900 dark:text-white">{{
-                            convertToHijri(result.employer.createdAt) }}</span>
+                            convertToHijri(result.createdAt) }}</span>
                     </div>
                     <div>
                         <span class="text-gray-500 dark:text-gray-400">الجهة المصدرة: </span>
@@ -61,11 +59,12 @@
                 </div>
             </div>
 
-            <!-- جدول البلاغات بنفس شكل الصورة: حدود كاملة + هيدر رمادي -->
+            <!-- جدول تعديل المهنه -->
             <div
                 class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-3 sm:p-4 md:p-6 mb-6">
 
-                <div class="overflow-hidden rounded-lg border border-gray-300 dark:border-gray-700">
+                <div *ngIf="result.worker"
+                    class="overflow-hidden rounded-lg border border-gray-300 dark:border-gray-700">
                     <table class="w-full table-fixed border-collapse text-start"
                         style="font-size: clamp(7px, 2.2vw, 14px);">
                         <thead>
@@ -75,11 +74,9 @@
                                     الإسم</th>
                                 <th
                                     class="py-1.5 sm:py-3 px-1 sm:px-2 text-start border border-gray-300 dark:border-gray-700">
-                                    رقم الإقامة</th>
-
+                                    رقم الإقامة / الهوية</th>
                                 <th
                                     class="py-1.5 sm:py-3 px-1 sm:px-2 text-start border border-gray-300 dark:border-gray-700">
-
                                     المهنة السابقة</th>
                                 <th
                                     class="py-1.5 sm:py-3 px-1 sm:px-2 text-start border border-gray-300 dark:border-gray-700">
@@ -90,49 +87,49 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let worker of workersWithAlerts" (click)="selectWorker(worker)"
-                                class="text-gray-800 dark:text-gray-200 font-bold cursor-pointer transition"
-                                [ngClass]="selectedWorker?._id === worker._id ? 'bg-green-50 dark:bg-green-950/30' : 'bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800'">
+                            <tr class="text-gray-800 dark:text-gray-200 font-bold bg-green-50 dark:bg-green-950/30">
                                 <td
                                     class="py-1.5 sm:py-3 px-1 sm:px-2 break-words border border-gray-200 dark:border-gray-700">
-                                    {{ worker.name }}</td>
+                                    {{ result.worker.name }}</td>
                                 <td
                                     class="py-1.5 sm:py-3 px-1 sm:px-2 break-words border border-gray-200 dark:border-gray-700">
-                                    {{ worker.iqama_number }}</td>
+                                    {{ result.worker.identity_number }}</td>
                                 <td
                                     class="py-1.5 sm:py-3 px-1 sm:px-2 break-words border border-gray-200 dark:border-gray-700">
-                                    {{ worker.profession_changes?.old_profession }}</td>
+                                    {{ result.worker.profession_changes?.old_profession || '—' }}</td>
                                 <td
                                     class="py-1.5 sm:py-3 px-1 sm:px-2 break-words border border-gray-200 dark:border-gray-700">
-                                    {{ worker.profession || '—' }}</td>
+                                    {{ result.worker.profession }}</td>
                                 <td
                                     class="py-1.5 sm:py-3 px-1 sm:px-2 break-words border border-gray-200 dark:border-gray-700">
-                                    {{ worker.profession_changes?.status === 'accepted' ? 'تمت الموافقة' : 'مرفوض' }}
+                                    {{ result.worker.profession_changes?.status === 'accepted' ? 'تمت الموافقة' : 'سارية
+                                    المفعول' }}
                                 </td>
-
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- رسالة عدم وجود مهن -->
-                <div *ngIf="workersWithAlerts.length === 0"
+                <!-- رسالة عدم وجود بيانات -->
+                <div *ngIf="!result.worker"
                     class="text-center py-8 text-[11px] sm:text-[14px] text-gray-500 dark:text-gray-400 font-bold">
-                    لا يوجد تغيير مهنة مسجلة لأي من العمالة.
+                    لا يوجد تغيير مهنة مسجلة لهذا الرقم.
                 </div>
+
                 <!-- أزرار الإجراءات: طباعة + إلغاء -->
                 <div class="flex items-center gap-2 w-100 sm:gap-3 mt-6 flex-wrap">
-                    <button (click)="onPrint()" [disabled]="!selectedWorker"
+                    <button (click)="onPrint()" [disabled]="!result"
                         class="bg-[#006C35] hover:bg-[#004B23] disabled:opacity-50 text-white font-black px-4 sm:px-6 py-2 rounded-lg transition text-[11px] sm:text-[14px]">
                         طباعة
                     </button>
-                    <button (click)="onEnd()"
+                    <button (click)="goBack()"
                         class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-black px-4 sm:px-6 py-2 rounded-lg transition text-[11px] sm:text-[14px]">
                         إلغاء
                     </button>
                 </div>
             </div>
 
+            <!-- جدول دلالات الحالات -->
             <div
                 class="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
                 <div

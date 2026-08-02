@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FamilyVisasInquiryService, FamilyVisasSearchResult } from '../family-visas-inquiry.service';
-import { FamilyVisa } from '../../../core/models/family-visa.model';
-
-type VisasTab = 'familyVisit' | 'familyRecruitment';
+import { FamilyVisasInquiryService } from '../family-visas-inquiry.service';
+import { FamilyVisa, FamilyVisasResponse } from '../../../core/models/family-visa.model';
 
 @Component({
   selector: 'app-family-visas-result',
@@ -13,10 +11,9 @@ type VisasTab = 'familyVisit' | 'familyRecruitment';
   templateUrl: './family-visas-result.component.html',
 })
 export class FamilyVisasResultComponent implements OnInit {
-  result: FamilyVisasSearchResult | null = null;
+  result: FamilyVisasResponse | null = null;
   loading = true;
   errorMsg = '';
-  activeTab: VisasTab = 'familyVisit';
 
   statusLegend = [
     { label: 'تم استخدامها', desc: 'يقصد بها إحدى الحالتين التاليتين: تم استخدام عمالة عليها التأشيرة ولم يتم الاستخدام عليها وقد تم إنهاء إجراءات الدخول إلى المملكة ويلزم مراجعة السفارة من وزارة الخارجية لتصحيح وضعها أو إلغائها.' },
@@ -56,81 +53,52 @@ export class FamilyVisasResultComponent implements OnInit {
     });
   }
 
-  private setResult(res: FamilyVisasSearchResult): void {
+  get workerInfo(): any {
+    return this.result?.worker || null;
+  }
+
+  // هنا يتم جلب التأشيرة المرجعة كـ Object مفرد
+  get visa(): FamilyVisa | null {
+    return this.result?.data || null;
+  }
+
+  private setResult(res: FamilyVisasResponse): void {
     this.result = res;
     this.loading = false;
-    this.activeTab = this.familyVisitVisas.length > 0 ? 'familyVisit' : 'familyRecruitment';
-  }
-
-  setTab(tab: VisasTab): void {
-    this.activeTab = tab;
-  }
-
-  /**
-   * الباك اند حالياً بيرجع كل التأشيرات لنفس العامل بغض النظر عن الـ purpose
-   * (endpoint الاستعلام مش بيفلتر بحقل purpose على FamilyVisas نفسها).
-   * فبندمج نتايج الاستدعائين مع بعض ونشيل التكرار بالـ _id، وبعدين نفلتر
-   * محلياً بحقل purpose الحقيقي بتاع كل تأشيرة — ده المصدر الصحيح للفلترة،
-   * مش تخمين على أساس وجود اسم زائر من عدمه.
-   */
-  private get allVisas(): FamilyVisa[] {
-    const visitData = this.result?.familyVisit?.data ?? [];
-    const recruitmentData = this.result?.familyRecruitment?.data ?? [];
-
-    const merged = new Map<string, FamilyVisa>();
-    [...visitData, ...recruitmentData].forEach((visa) => merged.set(visa._id, visa));
-
-    return Array.from(merged.values());
-  }
-
-  get familyVisitVisas(): FamilyVisa[] {
-    return this.allVisas.filter((visa) => visa.purpose === 'familyVisit');
-  }
-
-  get familyRecruitmentVisas(): FamilyVisa[] {
-    return this.allVisas.filter((visa) => visa.purpose === 'familyRecruitment');
-  }
-
-  get activeVisas(): FamilyVisa[] {
-    return this.activeTab === 'familyVisit' ? this.familyVisitVisas : this.familyRecruitmentVisas;
-  }
-
-  get familyVisitCount(): number {
-    return this.familyVisitVisas.length;
-  }
-
-  get familyRecruitmentCount(): number {
-    return this.familyRecruitmentVisas.length;
-  }
-
-  get workerInfo() {
-    return this.result?.familyVisit?.worker || this.result?.familyRecruitment?.worker;
   }
 
   onPrint(): void {
     window.print();
   }
 
-  onEnd(visa: FamilyVisa): void {
-    const confirmed = confirm(`هل تريد إنهاء طلب تأشيرة ${visa.visitor_name || 'هذا الطلب'}؟`);
-    if (confirmed) {
-      console.log('تم تأكيد إنهاء الطلب لـ', visa._id);
-    }
-  }
-
   goBack(): void {
     this.router.navigate(['/family-visas-inquiry']);
   }
+
   getStatusLabel(status: any): string {
-    if (!status) return 'قيد الانتظار';
+    if (!status) return 'تمت الموافقة';
 
-    // تحويل النص لحروف صغيرة لحمايتها من الـ Capital letters
-    const cleanStatus = status.toLowerCase().trim();
+    const cleanStatus = String(status).toLowerCase().trim();
 
-    if (cleanStatus === 'approved') return 'تمت الموافقة';
-    if (cleanStatus === 'rejected') return 'تم الرفض';
-    if (cleanStatus === 'pending') return 'قيد الانتظار';
+    if (cleanStatus === 'approved' || cleanStatus === 'تمت الموافقه' || cleanStatus === 'تمت الموافقة') return 'تمت الموافقة';
+    if (cleanStatus === 'rejected' || cleanStatus === 'مرفوض') return 'تم الرفض';
+    if (cleanStatus === 'pending' || cleanStatus === 'قيد الانتظار') return 'قيد الانتظار';
 
     return status;
+  }
+
+  isApproved(status: any): boolean {
+    if (!status) return true;
+    const cleanStatus = String(status).toLowerCase().trim();
+    return cleanStatus === 'approved' || cleanStatus === 'تمت الموافقه' || cleanStatus === 'تمت الموافقة';
+  }
+
+  getVisitLabel(purpose?: string): string {
+    if (!purpose) return 'استقدام عائلي';
+    const clean = purpose.toLowerCase().trim();
+
+    if (clean === 'familyvisit') return 'زيارة عائلية';
+    if (clean === 'familyrecruitment') return 'استقدام عائلي';
+    return purpose;
   }
 }

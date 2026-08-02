@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IqamaInquiryService } from '../../iqama-inquiry/iqama-inquiry.service';
 import { Router } from '@angular/router';
+import { ProfessionInquiryService } from '../profession-inquiry.service';
 
 @Component({
   selector: 'app-profession-seaech',
   imports: [CommonModule, FormsModule],
-  templateUrl: './profession-seaech.component.html',
-  styleUrl: './profession-seaech.component.css'
+  templateUrl: './profession-search.component.html',
+  styleUrl: './profession-search.component.css'
 })
-export class ProfessionSeaechComponent {
+export class ProfessionSearchComponent {
   @ViewChild('captchaCanvas') captchaCanvas!: ElementRef<HTMLCanvasElement>;
 
   identityNumber = '';
@@ -21,7 +21,7 @@ export class ProfessionSeaechComponent {
   loading = false;
   errorMsg = '';
 
-  constructor(private iqamaService: IqamaInquiryService, private router: Router) { }
+  constructor(private ProfessionService: ProfessionInquiryService, private router: Router) { }
 
   ngOnInit(): void {
     setTimeout(() => this.generateCaptcha(), 0);
@@ -86,7 +86,7 @@ export class ProfessionSeaechComponent {
     }
 
     this.loading = true;
-    this.iqamaService.search(this.identityNumber.trim(), this.sourceNumber.trim()).subscribe({
+    this.ProfessionService.search(this.identityNumber.trim(), this.sourceNumber.trim()).subscribe({
       next: () => {
         this.loading = false;
         this.router.navigate(['/profession-inquiry/result'], {

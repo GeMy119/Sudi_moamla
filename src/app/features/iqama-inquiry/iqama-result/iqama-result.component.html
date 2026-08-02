@@ -62,10 +62,10 @@
                         <span class="text-gray-500 dark:text-gray-400">الجهة المصدرة: </span>
                         <span class="font-black text-gray-900 dark:text-white">وزارة العمل - آلي</span>
                     </div>
-                    <div *ngIf="selectedWorker?.updatedAt">
+                    <div *ngIf="result.data!.updatedAt">
                         <span class="text-gray-500 dark:text-gray-400">تاريخ آخر تعديل: </span>
                         <span class="font-black text-gray-900 dark:text-white">{{
-                            convertToHijri(selectedWorker?.updatedAt) || "" }}</span>
+                            convertToHijri(result.data!.updatedAt) || "" }}</span>
                     </div>
                 </div>
             </div>
@@ -88,22 +88,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let worker of workers" (click)="selectWorker(worker)"
-                                class="border-b border-gray-100 dark:border-gray-800 text-gray-800 dark:text-gray-200 font-bold cursor-pointer transition"
-                                [ngClass]="selectedWorker?._id === worker._id ? 'bg-green-50 dark:bg-green-950/30' : 'hover:bg-gray-50 dark:hover:bg-gray-800'">
-                                <td class="py-3 flex items-center gap-2">
-                                    <input type="radio" name="workerSelect"
-                                        [checked]="selectedWorker?._id === worker._id" (click)="selectWorker(worker)"
-                                        class="accent-[#006C35]" />
-                                    {{ worker.name }}
-                                </td>
-                                <td class="py-3">{{ worker.iqama_number }}</td>
-                                <td class="py-3">{{ worker.iqama_issue_date }}</td>
-                                <td class="py-3">{{ worker.iqama_expiry_date }}</td>
+                            <tr
+                                class="border-b border-gray-100 dark:border-gray-800 text-gray-800 dark:text-gray-200 font-bold cursor-pointer transition">
+                                <td class="py-3">{{ result.data!.name }}</td>
+                                <td class="py-3">{{ result.data!.iqama_number }}</td>
+                                <td class="py-3">{{ result.data!.iqama_issue_date }}</td>
+                                <td class="py-3">{{ result.data!.iqama_expiry_date }}</td>
                                 <td class="py-3">
                                     <span
                                         class="px-2.5 py-1 rounded-md text-[12px] font-black bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400">
-                                        {{ worker.iqama_status }}
+                                        {{ result.data!.iqama_status }}
                                     </span>
                                 </td>
                             </tr>
@@ -113,45 +107,40 @@
 
                 <!-- كارت (موبايل) -->
                 <div class="md:hidden flex flex-col gap-3">
-                    <div *ngFor="let worker of workers" (click)="selectWorker(worker)"
-                        class="border rounded-lg p-4 flex flex-col gap-2 cursor-pointer transition" [ngClass]="selectedWorker?._id === worker._id
-                ? 'bg-green-50 dark:bg-green-950/30 border-green-300 dark:border-green-800'
-                : 'border-gray-200 dark:border-gray-700'">
+                    <div>
                         <div class="flex items-center justify-between">
                             <span class="font-black text-gray-900 dark:text-white text-[14px] flex items-center gap-2">
-                                <input type="radio" name="workerSelectMobile"
-                                    [checked]="selectedWorker?._id === worker._id" class="accent-[#006C35]" />
-                                {{ worker.name }}
+                                {{ result.data!.name }}
                             </span>
                             <span
                                 class="px-2.5 py-1 rounded-md text-[11px] font-black bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400">
-                                {{ worker.iqama_status }}
+                                {{ result.data!.iqama_status }}
                             </span>
                         </div>
                         <div class="grid grid-cols-2 gap-y-1.5 text-[12px] text-gray-600 dark:text-gray-400">
                             <span>رقم الإقامة: <span class="font-black text-gray-900 dark:text-white">{{
-                                    worker.iqama_number }}</span></span>
+                                    result.data!.iqama_number }}</span></span>
                             <span>الإصدار: <span class="font-black text-gray-900 dark:text-white">{{
-                                    worker.iqama_issue_date }}</span></span>
+                                    result.data!.iqama_issue_date }}</span></span>
                             <span class="col-span-2">الإنتهاء: <span class="font-black text-gray-900 dark:text-white">{{
-                                    worker.iqama_expiry_date }}</span></span>
+                                    result.data!.iqama_expiry_date }}</span></span>
                         </div>
                     </div>
                 </div>
 
                 <!-- رسالة عدم وجود بيانات -->
-                <div *ngIf="workers.length === 0" class="text-center py-8 text-gray-500 dark:text-gray-400 font-bold">
+                <div *ngIf="!result.data" class="text-center py-8 text-gray-500 dark:text-gray-400 font-bold">
                     لا يوجد عمالة مسجلة لهذا الكفيل.
                 </div>
 
                 <!-- أزرار الإجراءات -->
-                <div *ngIf="workers.length > 0" class="flex items-center gap-3 mt-6 flex-wrap">
+                <div *ngIf="!result" class="flex items-center gap-3 mt-6 flex-wrap">
                     <span class="w-2 h-2 bg-green-600 rounded-full"></span>
-                    <button (click)="onPrint()" [disabled]="!selectedWorker"
+                    <button (click)="onPrint()" [disabled]="!result"
                         class="bg-[#006C35] hover:bg-[#004B23] disabled:opacity-50 text-white font-black px-6 py-2 rounded-lg transition text-[14px]">
                         طباعة
                     </button>
-                    <button (click)="onEnd()" [disabled]="!selectedWorker"
+                    <button (click)="onEnd()" [disabled]="!result"
                         class="bg-[#006C35] hover:bg-[#004B23] disabled:opacity-50 text-white font-black px-6 py-2 rounded-lg transition text-[14px]">
                         إنهاء
                     </button>

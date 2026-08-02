@@ -90,7 +90,7 @@ export class FamilyVisasSearchComponent implements OnInit {
       next: (res) => {
         this.loading = false;
 
-        if (!res.familyVisit && !res.familyRecruitment) {
+        if (!res.data.purpose) {
           this.errorMsg = 'لا يوجد بيانات مطابقة لهذه البيانات.';
           this.generateCaptcha();
           return;

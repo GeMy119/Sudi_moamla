@@ -26,23 +26,23 @@
 
             <div class="bg-gray-50 border border-gray-200 rounded p-4 mb-6">
                 <h3 class="text-lg font-bold text-gray-700 mb-4 pb-2 border-b border-gray-200">
-                    تفاصيل || {{ employerData?.name }}
+                    تفاصيل || {{ employerData.name }}
                 </h3>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-4 gap-x-8 text-sm">
                     <div class="flex items-center">
                         <span class="text-gray-500 font-medium ml-2">رقم الهوية | السجل :</span>
-                        <span class="text-gray-800 font-bold font-mono">{{ employerData?.identity_number }}</span>
+                        <span class="text-gray-800 font-bold font-mono">{{ employerData.identity_number }}</span>
                     </div>
 
                     <div class="flex items-center">
                         <span class="text-gray-500 font-medium ml-2">رقم الصادر :</span>
-                        <span class="text-gray-800 font-bold font-mono">{{ employerData?.source_number }}</span>
+                        <span class="text-gray-800 font-bold font-mono">{{ employerData.source_number }}</span>
                     </div>
 
                     <div class="flex items-center">
                         <span class="text-gray-500 font-medium ml-2">تاريخ الإصدار :</span>
-                        <span class="text-gray-800 font-medium">{{ employerData?.marriage_permit?.issue_date ||
+                        <span class="text-gray-800 font-medium">{{ employerData.marriage_permit?.issue_date ||
                             '1447/03/08' }}</span>
                     </div>
 
@@ -58,6 +58,7 @@
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-bold">
                             <th class="p-3 border-l border-gray-200">الرقم التسلسلي</th>
+                            <th class="p-3 border-l border-gray-200">الاسم</th>
                             <th class="p-3 border-l border-gray-200">فئة المهنة</th>
                             <th class="p-3 border-l border-gray-200">الجنسية</th>
                             <th class="p-3 border-l border-gray-200">النوع</th>
@@ -69,22 +70,23 @@
                     </thead>
                     <tbody class="text-gray-700">
                         <tr class="hover:bg-gray-50 border-b border-gray-100 font-medium">
-                            <td class="p-3 border-l border-gray-200 font-mono">{{ employerData?.reference_number }}</td>
+                            <td class="p-3 border-l border-gray-200 font-mono">{{ employerData.reference_number }}</td>
+                            <td class="p-3 border-l border-gray-200">{{ employerData.marriage_permit?.name }}</td>
                             <td class="p-3 border-l border-gray-200">{{
-                                employerData?.marriage_permit?.ProfessionCategory || 'زوجة' }}</td>
-                            <td class="p-3 border-l border-gray-200">{{ employerData?.marriage_permit?.wife_nationality
+                                employerData.marriage_permit?.ProfessionCategory || 'زوجة' }}</td>
+                            <td class="p-3 border-l border-gray-200">{{ employerData.marriage_permit?.wife_nationality
                                 }}</td>
-                            <td class="p-3 border-l border-gray-200">{{ employerData?.marriage_permit?.type || 'تصريح
+                            <td class="p-3 border-l border-gray-200">{{ employerData.marriage_permit?.type || 'تصريح
                                 زواج' }}</td>
-                            <td class="p-3 border-l border-gray-200">{{ employerData?.marriage_permit?.arrival_port }}
+                            <td class="p-3 border-l border-gray-200">{{ employerData.marriage_permit?.arrival_port }}
                             </td>
                             <td class="p-3 border-l border-gray-200 text-emerald-600 font-bold">
-                                {{ employerData?.marriage_permit?.status === 'accepted' ? 'تمت الموافقة' : 'تم الإلغاء'
+                                {{ employerData.marriage_permit?.status === 'accepted' ? 'تمت الموافقة' : 'تم الإلغاء'
                                 }}
                             </td>
                             <td class="p-3 border-l border-gray-200 font-mono">{{
-                                employerData?.marriage_permit?.file_number || '0' }}</td>
-                            <td class="p-3 font-mono">{{ employerData?.marriage_permit?.sending_date || '-' }}</td>
+                                employerData.marriage_permit?.file_number || '0' }}</td>
+                            <td class="p-3 font-mono">{{ employerData.marriage_permit?.sending_date || '-' }}</td>
                         </tr>
                     </tbody>
                 </table>

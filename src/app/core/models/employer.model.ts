@@ -1,12 +1,13 @@
 export interface MarriagePermit {
-    status?: 'accepted' | 'cancled';
-    issue_date?: string;
-    sending_date?: string;
-    wife_nationality?: string;
-    type?: string;
-    arrival_port?: string;
-    ProfessionCategory?: string;
-    file_number?: string;
+    status: 'accepted' | 'cancled';
+    issue_date: string;
+    sending_date: string;
+    wife_nationality: string;
+    type: string;
+    arrival_port: string;
+    ProfessionCategory: string;
+    file_number: string;
+    name: string
 }
 
 export interface TicketVisaReview {
@@ -27,8 +28,8 @@ export interface Employer {
     reference_number: string;
     marriage_permit?: MarriagePermit;
     ticket_visa_review?: TicketVisaReview[];
-    createdAt?: string;
-    updatedAt?: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface ApiResponse<T> {

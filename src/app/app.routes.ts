@@ -11,12 +11,12 @@ import { VisitResultComponent } from './features/visit-inquiry/visit-result/visi
 import { VisitSearchComponent } from './features/visit-inquiry/visit-search/visit-search.component';
 import { AlertSearchComponent } from './features/alert-inquiry/alert-search/alert-search.component';
 import { AlertResultComponent } from './features/alert-inquiry/alert-result/alert-result.component';
-import { ProfessionSeaechComponent } from './features/profession-inquiry/profession-seaech/profession-seaech.component';
-import { professionResultComponent } from './features/profession-inquiry/profession-result/profession-result.component';
+import { ProfessionSearchComponent } from './features/profession-inquiry/profession-search/profession-search.component';
 import { VisasReviewSearchComponent } from './features/visas-review-inquiry/visas-review-search/visas-review-search.component';
 import { VisasReviewResultComponent } from './features/visas-review-inquiry/visas-review-result/visas-review-result.component';
 import { MoamlaSearchComponent } from './features/moamla-inquiry/moamla-search/moamla-search.component';
 import { MoamlaResultComponent } from './features/moamla-inquiry/moamla-result/moamla-result.component';
+import { ProfessionResultComponent } from './features/profession-inquiry/profession-result/profession-result.component';
 
 export const routes: Routes = [
     {
@@ -41,8 +41,8 @@ export const routes: Routes = [
     { path: 'visit-inquiry/result', component: VisitResultComponent },
     { path: 'alert-inquiry', component: AlertSearchComponent },
     { path: 'alert-inquiry/result', component: AlertResultComponent },
-    { path: 'profession-inquiry', component: ProfessionSeaechComponent },
-    { path: 'profession-inquiry/result', component: professionResultComponent },
+    { path: 'profession-inquiry', component: ProfessionSearchComponent },
+    { path: 'profession-inquiry/result', component: ProfessionResultComponent },
     { path: 'visas-review-inquiry', component: VisasReviewSearchComponent },
     { path: 'visas-review-inquiry/result', component: VisasReviewResultComponent },
     { path: 'moamla-inquiry', component: MoamlaSearchComponent },
