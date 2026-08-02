@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://api.servicc-sa.com/api/v1',
+    apiUrl: 'https://moamla-back-end.vercel.app/api/v1',
 };
