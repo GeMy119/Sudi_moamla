@@ -39,9 +39,14 @@
                             {{ worker.employer_source_number || worker.source_number || '—' }}
                         </span>
                     </div>
-                    <div class="sm:col-span-2 flex flex-wrap items-center sm:justify-start gap-1">
+                    <div class="flex flex-wrap items-center sm:justify-start gap-1">
                         <span class="text-gray-500 dark:text-gray-400">الجهة المصدرة:</span>
                         <span class="font-black text-gray-900 dark:text-white">مكتب الإستقدام - آلي</span>
+                    </div>
+                    <div class="flex flex-wrap items-center sm:justify-start gap-1">
+                        <span class="text-gray-500 dark:text-gray-400">تاريخ الموافقة: </span>
+                        <span class="font-black text-gray-900 dark:text-white">{{
+                            convertToHijri(visa?.createdAt) }}</span>
                     </div>
                 </div>
             </div>

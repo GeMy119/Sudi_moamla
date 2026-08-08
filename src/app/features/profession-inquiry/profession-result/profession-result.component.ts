@@ -83,13 +83,24 @@ export class ProfessionResultComponent implements OnInit {
 
     try {
       const date = new Date(dateString);
+
+      if (isNaN(date.getTime())) return '—';
+
       const formatter = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {
         day: '2-digit',
         month: '2-digit',
-        year: 'numeric'
+        year: 'numeric',
+        timeZone: 'UTC'
       });
 
-      return formatter.format(date); // النتيجة: 11/18/1445
+      // تفكيك أجزاء التاريخ (اليوم، الشهر، السنة)
+      const parts = formatter.formatToParts(date);
+      const day = parts.find(p => p.type === 'day')?.value;
+      const month = parts.find(p => p.type === 'month')?.value;
+      const year = parts.find(p => p.type === 'year')?.value;
+
+      // تجميع الأجزاء بالترتيب المطلوبة DD/MM/YYYY
+      return `${year}-${month}-${day}`;
     } catch (error) {
       return '—';
     }
